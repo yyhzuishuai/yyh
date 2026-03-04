@@ -1,6 +1,6 @@
 <template>
     <div class="list-page">
-        <div class="breadcrumb-wrapper" style="width: 100%;">
+        <div class="breadcrumb-wrapper">
             <div class="bread_view">
                 <el-breadcrumb separator=">" class="breadcrumb">
                     <el-breadcrumb-item class="first_breadcrumb" :to="{ path: '/' }">首页</el-breadcrumb-item>
@@ -8,62 +8,45 @@
                 </el-breadcrumb>
             </div>
             <div class="back_view" v-if="centerType">
-                <el-button class="back_btn" @click="backClick">返回</el-button>
+                <el-button class="back_btn btn-gradient" @click="backClick">返回</el-button>
             </div>
         </div>
-		<div class="list_search">
+		<div class="list_search glass-card">
 			<div class="search_view">
 				<div class="search_label">
 					活动标题：
 				</div>
 				<div class="search_box">
-					<el-input class="search_inp" v-model="searchQuery.huodongbiaoti" placeholder="活动标题"
+					<el-input class="search_inp input-dark" v-model="searchQuery.huodongbiaoti" placeholder="请输入活动标题"
 						clearable>
 					</el-input>
 				</div>
 			</div>
 			<div class="search_btn_view">
-				<el-button class="search_btn" @click="searchClick">搜索</el-button>
-				<el-button class="add_btn" v-if="btnAuth('dianpuhuodong','新增')" @click="addClick">新增</el-button>
+				<el-button class="search_btn btn-gradient" @click="searchClick">搜索</el-button>
+				<el-button class="add_btn btn-gradient" v-if="btnAuth('dianpuhuodong','新增')" @click="addClick">新增</el-button>
 			</div>
 		</div>
 
-
-
-                <div class="data_view">
-<div class="item" v-for="(item,index) in list" @click.stop="detailClick(item.id)">
-  
-      <div class="img_box">
-        
-        <img :src="item.imgUrls[0]" @click.stop="preViewClick(item.imgUrls[0])">
-      </div>
-  
-  <div class="content">
-                            <div class="data_title">
-                                <span>
-                                    {{item.huodongbiaoti}}
-                                </span>
-                            </div>
-                            <div class="data_title">
-                                <span>
-                                    活动时间：{{item.huodongshijian}}
-                                </span>
-                            </div>
-                            <div class="data_title">
-                                <span>
-                                    {{item.shangjiamingcheng}}
-                                </span>
-                            </div>
-
-
-    <div class="count-row">
-
-
-
-    </div>
-  </div>
-</div>
+        <div class="data_view">
+            <div class="item glass-card animate-fade-up" v-for="(item,index) in list" :key="item.id" @click.stop="detailClick(item.id)" :style="{animationDelay: index*0.08+'s'}">
+                <div class="img_box">
+                    <img :src="item.imgUrls[0]" @click.stop="preViewClick(item.imgUrls[0])">
                 </div>
+                <div class="content">
+                    <div class="data_title activity-title">
+                        <span>{{item.huodongbiaoti}}</span>
+                    </div>
+                    <div class="activity-time-tag">
+                        <span>{{item.huodongshijian}}</span>
+                    </div>
+                    <div class="merchant-name">
+                        <span>{{item.shangjiamingcheng}}</span>
+                    </div>
+                    <div class="count-row"></div>
+                </div>
+            </div>
+        </div>
 
 				<el-pagination
 					background
@@ -224,4 +207,182 @@
 	init()
 </script>
 <style lang="scss" scoped>
+.list-page {
+    background: transparent !important;
+    min-height: 100vh;
+    padding: 30px 7%;
+    width: 100%;
+}
+
+.breadcrumb-wrapper {
+    margin-bottom: 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .breadcrumb {
+        font-size: 16px;
+        
+        ::v-deep .el-breadcrumb__inner {
+            color: var(--color-gray) !important;
+            &.is-link:hover {
+                color: var(--color-pink) !important;
+            }
+        }
+        
+        ::v-deep .el-breadcrumb__separator {
+            color: var(--color-pink) !important;
+            font-weight: bold;
+        }
+    }
+}
+
+.list_search {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 30px;
+    background: rgba(255, 255, 255, 0.05) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 107, 157, 0.2);
+    border-radius: 20px;
+    padding: 20px 24px;
+    
+    .search_view {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        
+        .search_label {
+            color: var(--color-gray);
+            font-size: 14px;
+            white-space: nowrap;
+        }
+        
+        .search_box {
+            width: 250px;
+        }
+    }
+    
+    ::v-deep .el-input__wrapper {
+        background: rgba(255, 255, 255, 0.05) !important;
+        box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1) inset !important;
+        border-radius: 12px;
+        
+        .el-input__inner {
+            color: #ffffff !important;
+            &::placeholder {
+                color: rgba(255, 255, 255, 0.3) !important;
+            }
+        }
+    }
+}
+
+.data_view {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 30px !important;
+    margin: 30px 0 40px !important;
+    width: 100% !important;
+    
+    .item {
+        background: rgba(255, 255, 255, 0.05) !important;
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 107, 157, 0.18) !important;
+        border-radius: 20px !important;
+        overflow: hidden;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+        position: relative;
+        width: 100% !important;
+        margin: 0 !important;
+        
+        &:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(255, 107, 157, 0.18);
+            border-color: rgba(255, 107, 157, 0.45) !important;
+            
+            .img_box img {
+                transform: scale(1.06);
+            }
+        }
+        
+        .img_box {
+            width: 100% !important;
+            aspect-ratio: 16 / 9;
+            overflow: hidden;
+            display: block;
+            
+            img {
+                width: 100% !important;
+                height: 100% !important;
+                object-fit: cover;
+                display: block;
+                transition: transform 0.4s ease;
+            }
+        }
+        
+        .content {
+            padding: 16px;
+            
+            .activity-title {
+                color: #ffffff;
+                font-weight: bold;
+                font-size: 15px;
+                margin-bottom: 12px;
+                @extend .text-one-row;
+            }
+            
+            .activity-time-tag {
+                background: rgba(255, 107, 157, 0.1);
+                color: #ff6b9d;
+                border: 1px solid rgba(255, 107, 157, 0.3);
+                border-radius: 50px;
+                font-size: 12px;
+                padding: 3px 12px;
+                display: inline-block;
+                margin-bottom: 12px;
+            }
+            
+            .merchant-name {
+                color: var(--color-gray);
+                font-size: 13px;
+                @extend .text-one-row;
+            }
+        }
+    }
+}
+
+::v-deep .el-pagination {
+    justify-content: center;
+    .el-pager li {
+        background: rgba(255, 255, 255, 0.05) !important;
+        color: var(--color-gray) !important;
+        border-radius: 8px;
+        &:hover {
+            color: var(--color-pink) !important;
+        }
+        &.is-active {
+            background: linear-gradient(45deg, var(--color-pink), var(--color-blue)) !important;
+            color: #ffffff !important;
+        }
+    }
+    .btn-prev, .btn-next {
+        background: rgba(255, 255, 255, 0.05) !important;
+        color: var(--color-gray) !important;
+        border-radius: 8px;
+        &:disabled {
+            opacity: 0.3;
+        }
+    }
+}
+
+.text-one-row {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 </style>

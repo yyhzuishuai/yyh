@@ -5,6 +5,7 @@ import store from './store'
 import '@/assets/css/animate.min.css'
 import '@/assets/css/iconfont.css'
 import '@/assets/css/style.scss'
+import '@/styles/global.css'
 const app = createApp(App)
 app.config.warnHandler = () => null;
 

@@ -1,0 +1,127 @@
+:root {
+  /* CSS 变量 */
+  --bg-primary: #0d0d1a;
+  --bg-card: rgba(255, 255, 255, 0.04);
+  --color-pink: #ff6b9d;
+  --color-blue: #00d4ff;
+  --color-gray: rgba(255, 255, 255, 0.55);
+  --border-card: 1px solid rgba(255, 107, 157, 0.2);
+  --radius-card: 20px;
+  --shadow-hover: 0 20px 40px rgba(255, 107, 157, 0.2);
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body {
+  background: var(--bg-primary);
+  font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: #ffffff;
+  margin: 0;
+  min-height: 100vh;
+}
+
+/* 自定义滚动条 */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, var(--color-pink), var(--color-blue));
+  border-radius: 10px;
+}
+
+/* 通用 class */
+.glass-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: var(--border-card);
+  border-radius: var(--radius-card);
+  transition: var(--transition);
+}
+
+.glass-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-hover);
+  border-color: rgba(255, 107, 157, 0.5);
+}
+
+.btn-gradient {
+  background: linear-gradient(45deg, var(--color-pink), var(--color-blue));
+  border: none;
+  border-radius: 30px;
+  color: white;
+  padding: 10px 24px;
+  cursor: pointer;
+  transition: var(--transition);
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 1px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-gradient:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(255, 107, 157, 0.6), 0 0 40px rgba(0, 212, 255, 0.3);
+}
+
+.input-dark {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: white;
+  padding: 12px 16px;
+  transition: var(--transition);
+  outline: none;
+}
+
+.input-dark:focus {
+  border-color: var(--color-pink);
+  box-shadow: 0 0 15px rgba(255, 107, 157, 0.3);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.text-gradient {
+  background: linear-gradient(45deg, var(--color-pink), var(--color-blue));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+/* 动画 */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+@keyframes pulse-glow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 107, 157, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 15px rgba(255, 107, 157, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 107, 157, 0);
+  }
+}
+
+.pulse-glow {
+  animation: pulse-glow 2s infinite;
+}

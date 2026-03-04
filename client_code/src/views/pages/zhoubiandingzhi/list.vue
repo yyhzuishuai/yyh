@@ -1,6 +1,6 @@
 <template>
     <div class="list-page">
-        <div class="breadcrumb-wrapper" style="width: 100%;">
+        <div class="breadcrumb-wrapper">
             <div class="bread_view">
                 <el-breadcrumb separator=">" class="breadcrumb">
                     <el-breadcrumb-item class="first_breadcrumb" :to="{ path: '/' }">首页</el-breadcrumb-item>
@@ -8,57 +8,44 @@
                 </el-breadcrumb>
             </div>
             <div class="back_view" v-if="centerType">
-                <el-button class="back_btn" @click="backClick">返回</el-button>
+                <el-button class="back_btn btn-gradient" @click="backClick">返回</el-button>
             </div>
         </div>
-		<div class="list_search">
+		<div class="list_search glass-card">
 			<div class="search_view">
 				<div class="search_label">
 					商家账号：
 				</div>
 				<div class="search_box">
-					<el-input class="search_inp" v-model="searchQuery.shangjiazhanghao" placeholder="商家账号"
+					<el-input class="search_inp input-dark" v-model="searchQuery.shangjiazhanghao" placeholder="请输入商家账号"
 						clearable>
 					</el-input>
 				</div>
 			</div>
 			<div class="search_btn_view">
-				<el-button class="search_btn" @click="searchClick">搜索</el-button>
-				<el-button class="add_btn" v-if="btnAuth('zhoubiandingzhi','新增')" @click="addClick">新增</el-button>
+				<el-button class="search_btn btn-gradient" @click="searchClick">搜索</el-button>
+				<el-button class="add_btn btn-gradient" v-if="btnAuth('zhoubiandingzhi','新增')" @click="addClick">新增</el-button>
 			</div>
 		</div>
 
-
-
-                <div class="data_view">
-<div class="item" v-for="(item,index) in list" @click.stop="detailClick(item.id)">
-  
-      <div class="img_box">
-        
-        <img :src="item.imgUrls[0]" @click.stop="preViewClick(item.imgUrls[0])">
-      </div>
-  
-  <div class="content">
-                            <div class="data_title">
-                                <span>
-                                    {{item.shangjiamingcheng}}
-                                </span>
-                            </div>
-                            <div class="data_title">
-                                <span>
-                                    定制价格：{{item.dingzhijiage}}
-                                </span>
-                            </div>
-
-
-    <div class="count-row">
-
-
-
-    </div>
-  </div>
-</div>
+        <div class="data_view">
+            <div class="item glass-card animate-fade-up" v-for="(item,index) in list" :key="item.id" @click.stop="detailClick(item.id)" :style="{animationDelay: index*0.08+'s'}">
+                <div class="img_box">
+                    <div class="custom-badge">定制</div>
+                    <img :src="item.imgUrls[0]" @click.stop="preViewClick(item.imgUrls[0])">
                 </div>
+                <div class="content">
+                    <div class="data_title merchant-name">
+                        <span>{{item.shangjiamingcheng}}</span>
+                    </div>
+                    <div class="data_title custom-price">
+                        <span class="price-label">定制价格：</span>
+                        <span class="price-num text-gradient">￥{{item.dingzhijiage}}</span>
+                    </div>
+                    <div class="count-row"></div>
+                </div>
+            </div>
+        </div>
 
 				<el-pagination
 					background
@@ -219,4 +206,196 @@
 	init()
 </script>
 <style lang="scss" scoped>
+.list-page {
+    background: transparent !important;
+    min-height: 100vh;
+    padding: 30px 7%;
+    width: 100%;
+}
+
+.breadcrumb-wrapper {
+    margin-bottom: 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .breadcrumb {
+        font-size: 16px;
+        
+        ::v-deep .el-breadcrumb__inner {
+            color: var(--color-gray) !important;
+            &.is-link:hover {
+                color: var(--color-pink) !important;
+            }
+        }
+        
+        ::v-deep .el-breadcrumb__separator {
+            color: var(--color-pink) !important;
+            font-weight: bold;
+        }
+    }
+}
+
+.list_search {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 30px;
+    background: rgba(255, 255, 255, 0.05) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 107, 157, 0.2);
+    border-radius: 20px;
+    padding: 20px 24px;
+    
+    .search_view {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        
+        .search_label {
+            color: var(--color-gray);
+            font-size: 14px;
+            white-space: nowrap;
+        }
+        
+        .search_box {
+            width: 200px;
+        }
+    }
+    
+    ::v-deep .el-input__wrapper {
+        background: rgba(255, 255, 255, 0.05) !important;
+        box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1) inset !important;
+        border-radius: 12px;
+        
+        .el-input__inner {
+            color: #ffffff !important;
+            &::placeholder {
+                color: rgba(255, 255, 255, 0.3) !important;
+            }
+        }
+    }
+}
+
+.data_view {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 24px !important;
+    margin: 30px 0 40px !important;
+    width: 100% !important;
+    
+    .item {
+        background: rgba(255, 255, 255, 0.05) !important;
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 107, 157, 0.18) !important;
+        border-radius: 20px !important;
+        overflow: hidden;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+        position: relative;
+        width: 100% !important;
+        margin: 0 !important;
+        
+        &:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(255, 107, 157, 0.18);
+            border-color: rgba(255, 107, 157, 0.45) !important;
+            
+            .img_box img {
+                transform: scale(1.08);
+            }
+        }
+        
+        .img_box {
+            width: 100% !important;
+            height: 200px;
+            overflow: hidden;
+            position: relative;
+            display: block;
+            
+            img {
+                width: 100% !important;
+                height: 100% !important;
+                object-fit: cover;
+                display: block;
+                transition: transform 0.4s ease;
+            }
+
+            .custom-badge {
+                position: absolute;
+                top: 12px;
+                right: 12px;
+                background: linear-gradient(135deg, #ff6b9d, #00d4ff);
+                color: white;
+                font-size: 11px;
+                padding: 3px 10px;
+                border-radius: 50px;
+                z-index: 1;
+                font-weight: 600;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            }
+        }
+        
+        .content {
+            padding: 16px;
+            
+            .merchant-name {
+                color: #ffffff;
+                font-weight: 600;
+                font-size: 15px;
+                margin-bottom: 8px;
+                @extend .text-one-row;
+            }
+            
+            .custom-price {
+                font-size: 13px;
+                display: flex;
+                align-items: center;
+                gap: 4px;
+                
+                .price-label {
+                    color: rgba(255, 255, 255, 0.55);
+                }
+                
+                .price-num {
+                    font-size: 20px;
+                    font-weight: 700;
+                }
+            }
+        }
+    }
+}
+
+::v-deep .el-pagination {
+    justify-content: center;
+    .el-pager li {
+        background: rgba(255, 255, 255, 0.05) !important;
+        color: var(--color-gray) !important;
+        border-radius: 8px;
+        &:hover {
+            color: var(--color-pink) !important;
+        }
+        &.is-active {
+            background: linear-gradient(45deg, var(--color-pink), var(--color-blue)) !important;
+            color: #ffffff !important;
+        }
+    }
+    .btn-prev, .btn-next {
+        background: rgba(255, 255, 255, 0.05) !important;
+        color: var(--color-gray) !important;
+        border-radius: 8px;
+        &:disabled {
+            opacity: 0.3;
+        }
+    }
+}
+
+.text-one-row {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 </style>

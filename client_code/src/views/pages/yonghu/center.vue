@@ -1,32 +1,34 @@
 <template>
-	<div class="center_view">
-		<div class="section_title">
-			<span>{{formName}}</span>
-		</div>
-		<div class="usersView">
-			<div class="usersTabView">
-				<div class="usersTab" :class="tabIndex=='center'?'usersTabActive':''" @click="tabClick({tableName:'center'})">个人中心</div>
-				<div class="usersTab " :class="tabIndex=='updatePassword'?'usersTabActive':''" @click="tabClick({tableName:'updatePassword'})">修改密码</div>
-                <div class="usersTab " :class="tabIndex=='chat'?'usersTabActive':''" @click="tabClick({tableName:'chat'})">聊天记录</div>
-				<template v-for="(item,index) in menuList">
-					<div v-if="item.child.length>1" class="usersTab" @mouseenter="usersTabHover(index)"
-						 @mouseleave="usersTabLeave">
-						{{item.menu}}
-						<el-collapse-transition>
-							<div class="usersTabHoverView" v-if="usersTabIndex==index">
-								<div class="usersTabHoverTab" v-for="(items,indexs) in item.child" @click="tabClick(items)">
-									{{items.menu}}
-                                </div>
-							</div>
-						</el-collapse-transition>
-					</div>
-					<div v-else-if="hasBack(item.child[0]) " class="usersTab" @click="tabClick(item.child[0])">
-						{{item.child[0].menu}}
-					</div>
-				</template>
-                <div class="usersTab" v-if="btnAuth('storeup','查看')" @click="tabClick({tableName:'storeup',type:1})">我的收藏</div>
+	<div class="center-container">
+		<div class="left-menu glass-card">
+			
+			<div class="menu-item" :class="{'is-active': tabIndex==='center'}" @click="tabClick({tableName:'center'})">
+				<i class="iconfont icon-user"></i>
+				<span>个人中心</span>
 			</div>
-			<div class="usersBox updateInfo" v-if="tabIndex=='center'">
+			<div class="menu-item" :class="{'is-active': tabIndex==='updatePassword'}" @click="tabClick({tableName:'updatePassword'})">
+				<i class="iconfont icon-password"></i>
+				<span>修改密码</span>
+			</div>
+			<div class="menu-item" :class="{'is-active': tabIndex==='chat'}" @click="tabClick({tableName:'chat'})">
+				<i class="iconfont icon-chat"></i>
+				<span>聊天记录</span>
+			</div>
+			<div class="menu-item" v-if="btnAuth('storeup','查看')" @click="tabClick({tableName:'storeup',type:1})">
+				<i class="iconfont icon-star"></i>
+				<span>我的收藏</span>
+			</div>
+			<template v-for="(item,index) in menuList">
+				<div v-if="hasBack(item.child[0])" class="menu-item" @click="tabClick(item.child[0])">
+					<i class="iconfont" :class="item.child[0].icon"></i>
+					<span>{{item.child[0].menu}}</span>
+				</div>
+			</template>
+		</div>
+
+		<div class="right-content">
+			<div class="content-box glass-card" v-if="tabIndex==='center'">
+				<div class="card-title">个人资料</div>
 				<el-form class="usersForm" ref="userFormRef" :model="userForm" label-width="120px" :rules="rules">
 					<el-row>
 						<el-col :span="12">
@@ -90,18 +92,19 @@
 							<el-form-item prop="money" label="余额">
 								<div class="vip_item">
 									<el-input class="vip_inp" v-model="userForm.money" placeholder="余额" readonly></el-input>
-									<el-button class="vip_btn" @click="rechargeClick">点我充值</el-button>
+									<el-button class="vip_btn btn-gradient" @click="rechargeClick">点我充值</el-button>
 								</div>
 							</el-form-item>
 						</el-col>
 					</el-row>
 					<div class="formModel_btn_box">
-						<el-button class="formModel_confirm" @click="updateSession">更新信息</el-button>
-						<el-button class="formModel_cancel" @click="loginout" type="danger">退出登录</el-button>
+						<el-button class="formModel_confirm btn-gradient" @click="updateSession">更新信息</el-button>
+						<el-button class="formModel_cancel btn-plain" @click="loginout" type="danger">退出登录</el-button>
 					</div>
 				</el-form>
 			</div>
-			<div class="usersBox updatePassword" v-if="tabIndex=='updatePassword'">
+			<div class="content-box glass-card" v-if="tabIndex==='updatePassword'">
+				<div class="card-title">修改密码</div>
 				<el-form class="usersForm" ref="passwordFormRef" :model="passwordForm" label-width="120px"
 					:rules="passwordRules">
 					<el-row>
@@ -125,21 +128,22 @@
 						</el-col>
 					</el-row>
 					<div class="formModel_btn_box">
-						<el-button class="formModel_confirm" @click="updatePassword">修改密码</el-button>
+						<el-button class="formModel_confirm btn-gradient" @click="updatePassword">修改密码</el-button>
 					</div>
 				</el-form>
 			</div>
-			<div class="usersBox chatRecord" v-if="tabIndex=='chat'">
-				<div class="z-box" :style='{"width":"70%","padding":"20px","margin":"0 auto"}'>
+			<div class="content-box glass-card" v-if="tabIndex==='chat'">
+				<div class="card-title">聊天记录</div>
+				<div class="z-box" :style='{"width":"100%","padding":"0","margin":"0"}'>
 					<div class="section-content" v-for="item in recordList" :key="item.id" @click="chatClick(item)"
                          style="justify-content: space-between;">
                         <div style="display: flex;align-items: center;">
                             <img :src="item.picture?$config.url + item.picture:require('@/assets/avatar.png')" style="width: 60px;height:60px;border-radius: 50%;object-fit: cover;"
                                  alt="">
                             <div style="margin: 0 0 0 10px;display: flex;flex-direction: column;align-items: flex-start;">
-                                <div :style='{"fontSize":"14px","color":"#000","flex":"1","fontWeight":"bold"}'
+                                <div :style='{"fontSize":"14px","color":"#fff","flex":"1","fontWeight":"bold"}'
                                      class="item-style">{{item.name}}</div>
-                                <div :style='{"color":"#666","flex":"1","fontSize":"14px","lineHeight":"1.5","display":"flex","alignItems":"center"}'
+                                <div :style='{"color":"rgba(255,255,255,0.7)","flex":"1","fontSize":"14px","lineHeight":"1.5","display":"flex","alignItems":"center"}'
                                      class="item-style">
                                     <div v-if="item.notreadnum" style="padding: 0 5px;height: 16px;border-radius: 50%;text-align: center;line-height: 16px;font-size: 12px;background: #f00;color:#fff;width: auto;margin: 0 2px 0 0">{{item.notreadnum}}</div>
                                     {{item.content.split('/').length>1&&item.content.split('/')[0]=='upload'?'[图片]':item.content}}
@@ -153,7 +157,8 @@
 					</div>
 				</div>
 			</div>
-			<div class="usersBox myCoupon" v-if="tabIndex=='myCoupon'">
+			<div class="content-box glass-card" v-if="tabIndex==='myCoupon'">
+			  <div class="card-title">我的优惠券</div>
 			  <div class="coupon-list">
 				<div class="item" v-for="(item,index) in couponList" :key="index" :class="item.status=='已过期'?'disabled expired':item.status=='已使用'?'disabled used':''">
 					<div class="box1">
@@ -822,761 +827,450 @@
 </script>
 
 <style lang="scss" scoped>
-	.usersView {
-		.usersBox {
-			.usersForm {
-				// form item
-				:deep(.el-form-item) {
-					// 内容盒子
-					.el-form-item__content {
-					}
-				}
-			}
-		}
-	}
-	:deep(.rechargeDialog) {
-		border-radius: 30px;
-		.el-dialog__header {
-			padding: 0;
-		}
-		.el-dialog__title {
-			padding: 0 46px;
-			height: 60px;
-			line-height: 60px;
-			border-radius: 30px 30px 30px 0;
-			display: inline-block;
-			color: #fff;
-			width: auto;
-			background: linear-gradient(120deg, #2891FF 0%, #2B53F0 100%);
-		}	
-	}
-	.centerPayInpView {
-		border: 1px solid #d8d8d8;
-		border-radius: 10px;
-		width: calc(100% - 80px);
-		display: flex;
-		align-items: center;
-		height: 100px;
-		justify-content: center;
-		margin: 0 40px;
-		
-		:deep(.pay_inp) {
-			width: 60%;
-			height: 50px;
-			font-size: 30px;
-			color: #f00;
-			text-align: center;
-			border-bottom: 1px solid #d8d8d8;
-			.el-input__inner {
-				height: 100%;
-				color: inherit;
-				text-align: center;
-			}
-		}
-	}
-	.centerPayList {
-		padding: 40px;
-		width: 100%;
-		.yinhang_view {
-			margin: 0 0 0 60px;
-			width: calc(100% - 60px);
-			:deep(.is-checked){
-				.el-radio__inner {
-					background: #f00;
-					border-color: #f00;
-				}
-				.el-radio__label {
-					color: #f00;
-				}
-			}
-		}
-		.centerPayView {
-			width: 100%;
-			padding: 20px 0;
-			display: flex;
-			justify-content: flex-start;
-			align-items: center;
-			border-bottom: 1px solid #d8d8d8;
-			font-size: 18px;
-			:deep(.el-radio){
-				.el-radio__label{
-					display: flex;
-					align-items: center;
-					img{
-						width: 30px;
-						margin-right: 6px;
-					}
-					.el-icon{
-						margin-left: 10px;
-						transition: all 0.3s;
-					}
-					.active {
-						transform: rotate(180deg);
-					}
-				}
-			}
-			
-		}
-	}
-    .del-friend,.del-chatRecord{
-        color: #ff4444;
-        font-size: 20px;
-    }
-	.section-content {
-		cursor: pointer;
-		padding: 20px;
-		box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.3);
-		margin: 0 0 20px;
-		color: #333;
-		background: #fff;
-		display: flex;
-		width: 100%;
-		border-color: #efefef;
-		border-width: 0;
-		align-items: center;
-		border-style: solid;
-		position: relative;
-	}
 
-	.section-content:hover {
-		color: #fff;
-		background: #DF847F10;
-	}
-	.chat-content {
-		padding-bottom: 20px;
-		width: 100%;
-		margin-bottom: 10px;
-		max-height: 300px;
-		height: 300px;
-		overflow-y: scroll;
-		border: 1px solid #eeeeee;
-		background: #fff;
-
-		.left-content {
-			float: left;
-			margin-bottom: 10px;
-			padding: 10px;
-			max-width: 80%;
-			display: flex;
-			align-items: center;
-		}
-
-		.right-content {
-			float: right;
-			margin-bottom: 10px;
-			padding: 10px;
-			max-width: 80%;
-			display: flex;
-			align-items: center;
-		}
-	}
-
-	.clear-float {
-		clear: both;
-	}
-	.noList {
-		color: #9e9e9e;
-		width: 100%;
-		text-align: center;
-		padding: 60px 0;
-	}
-	.coupon-list {
-		width: 100%;
-		display: flex;
-		flex-wrap: wrap;
-		.item {
-			width: 49%;
-			margin: 0 1% 20px 0;
-			background: url('http://clfile.zggen.cn/20240817/3d727f394907414795e8d931697d43c2.webp');
-			background-repeat: no-repeat;
-			background-position: center center;
-			background-size: cover;
-			padding: 60px 30px;
-			display: flex;
-			align-items: center;
-			position: relative;
-			.box1 {
-				flex: 1;
-				color: #000;
-				.coupon-name,coupon-condition {
-					font-size: 22px;
-					line-height: 1.5;
-				}
-				.coupon-term,coupon-term {
-					font-size: 14px;
-					line-height: 1.5;
-				}
-				.coupon-limit {
-					font-size: 12px;
-					line-height: 1.5;
-					color: #FF0800;
-				}
-			}
-			.box2 {
-				display: flex;
-				flex-direction: column;
-				align-items: center;
-				.price {
-					color: #FF0800;
-					font-size: 20px;
-					padding: 0 0 10px;
-					.num {
-						font-size: 28px;
-					}
-				}
-				.btn {
-					width: 100px;
-					height: 30px;
-					line-height: 30px;
-					border-radius: 30px;
-					background: #FF0800;
-					text-align: center;
-					color: #fff;
-					font-size: 18px;
-				}
-			}
-		}
-		.disabled {
-			filter: grayscale(100%);
-		}
-		.used::after{
-			background: url("http://clfile.zggen.cn/20240820/b2a0113b267c494ca7dd7bab1ecd4117.png");
-			position: absolute;
-			right: 10%;
-			top: 15%;
-			content: "";
-			width: 100px;
-			height: 100px;
-			background-size: 100% 100%;
-		}
-		.expired::after{
-			background: url("http://clfile.zggen.cn/20240820/b899406b040047288f88c5f441d3b311.png");
-			position: absolute;
-			right: 10%;
-			top: 15%;
-			content: "";
-			width: 100px;
-			height: 100px;
-			background-size: 100% 100%;
-		}
-		.noList {
-			color: #9e9e9e;
-			width: 100%;
-			text-align: center;
-			padding: 60px 0;
-		}
-	}
-</style>
-<style lang="scss">
-/**总盒子**/
-.center_view {
-    width: 100%;
-    padding: 0 7% 50px;
-    margin: 0 auto;
-    overflow: hidden;
-    font-size: 16px;
-    /* display: flex; */
-}
-/**内容区**/
-.center_view .usersView{
+.center-container {
+    min-height: 100vh;
+    background: #0d0d1a;
     display: flex;
-    margin: 0;
-    background: none;
-    padding: 0px;
-    border-radius: 8px;
-}
-
-/**右部 总盒子**/
-.center_view .usersView .usersBox{
-    width: calc(100% - 0px);
-    background: #fff;
-    margin: 0px;
-    padding: 0px;
+    gap: 24px;
+    padding: 32px;
     box-sizing: border-box;
-    box-shadow: none;
-    border-radius: 0 0 6px 6px;
-    padding-bottom: 50px;
-    
-   box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.3);
-border-radius: 0px 0px 0px 0px;
-}
-/**form盒子**/
-.center_view .usersView .usersBox .usersForm{
-    width: 100%;
-    padding: 30px;
-}
-.center_view .usersView .usersBox .usersForm .el-form-item{
-    margin: 0px 0px 20px;
-    display: flex;
-}
-.center_view .usersView .usersBox .usersForm .el-form-item .el-form-item__label{
-    width: 150px !important;
-    background: none;
-    text-align: right;
-    display: block;
-    font-size: 16px;
-    color: rgb(51, 51, 51);
-    font-weight: 500;
-}
-.center_view .list_inp .el-form-item__content{
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    flex-wrap: wrap;
-    width: calc(100% - 120px);
-}
-.center_view .el-form-item .el-input__wrapper{
-    height: 36px;
-    line-height: 36px;
-    padding: 0px 10px;
-    width: 100%;
-    box-sizing: border-box;
-    background: rgb(255, 255, 255);
-    font-size: 16px;
-    border-radius: 8px;
-}
-.center_view .el-input__wrapper.is-focus {
-    box-shadow: 0 0 0 1px var(--theme) inset;
-}
-
-/**会员**/
-.center_view .vip_item{
-    display: flex;
-    align-items: center;
-}
-.center_view .vip_item .vip_btn{
-    background: var(--theme);
-    color: rgb(255, 255, 255);
-    height: 36px;
-    line-height: 36px;
-    padding: 0px 20px;
-    border-radius: 8px;
-    margin: 0px 0px 0px 5px;
-    border-color: var(--theme);
-}
-/**end**/
-
-/**下拉选择**/
-.center_view .el-form-item__content .list_sel{
-    line-height: 36px;
-    /* border: 1px solid var(--theme); */
-    box-sizing: border-box;
-    width: calc(100% - 120px);
-    padding: 0;
-    border-radius: 0px;
-    background: rgb(255, 255, 255);
-    font-size: 16px;
-    border-radius: 4px;
-}
-.center_view .el-form-item__content .list_sel .el-select__wrapper{
-    line-height: 36px;
-    border-radius:8px;
-}
-.center_view .el-form-item__content .list_sel .el-select__wrapper.is-focused {
-    box-shadow: 0 0 0 1px var(--theme) inset;
-}
-.center_view .el-select-dropdown__item.is-selected {
-    color: var(--theme);
-    font-weight: 700;
-}
-/**end**/
-
-/**日期选择**/
-.center_view .el-form-item__content .list_date{
-    line-height: 36px;
-    box-sizing: border-box;
-    width: 100%;
-    background: rgb(255, 255, 255);
-    font-size: 16px;
-    border-radius: 4px;
-}
-/**end**/
-
-/**radio**/
-.center_view .list_radio{
-    display: flex;
-    width: calc(100% - 120px);
-    align-items: center;
-    flex-wrap: wrap;
-}
-.center_view .list_radio .el-radio{
-    width: 30%;
-    margin: 0px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.center_view .list_radio .el-radio .el-radio__inner{
-    border-color: #999;
-    background: #fff;
-}
-.center_view .list_radio .el-radio .el-radio__label{
-    color: #999;
-    font-size: 16px;
-}
-.center_view .list_radio .el-radio.is-checked .el-radio__inner{
-    border-color: var(--theme);
-    background: var(--theme);
-}
-.center_view .list_radio .el-radio.is-checked .el-radio__label{
-    color: var(--theme);
-    font-size: 16px;
-}
-/**end**/
-
-/**checkbox**/
-.center_view .list_checkbox{
-    display: flex;
-    width: calc(100% - 120px);
-    flex-wrap: wrap;
-    align-items: center;
-}
-.center_view .list_checkbox .el-checkbox{
-    width: 20%;
-    margin: 0px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.center_view .list_checkbox .el-checkbox__inner{
-    border-color: #999;
-    background: #fff;
-}
-.center_view .list_checkbox .el-checkbox__label{
-    color: #999;
-    font-size: 16px;
-}
-.center_view .list_checkbox .el-checkbox.is-checked .el-checkbox__inner{
-    border-color: var(--theme);
-    background: var(--theme);
-}
-.center_view .list_checkbox .el-checkbox.is-checked .el-checkbox__label{
-    color: var(--theme);
-    font-size: 16px;
-}
-/**end**/
-
-/**textarea**/
-.center_view .list_textarea{
-}
-.center_view .list_textarea .el-textarea__inner{
-    width: 100%;
-    min-height: 150px;
-    padding: 12px;
-    /* border: 1px solid var(--theme); */
-    border-radius: 0px;
-    color: #666;
-    font-size: 16px;
-    border-radius: 4px;
-}
-/**end**/
-
-/**图片上传**/
-/* 盒子 */
-.center_view .el-upload--picture-card{
-    background-color: rgb(255, 255, 255);
-    width: 100px;
-    height: 90px;
-    line-height: 100px;
-    text-align: center;
-    border:1px solid #ddd;
-    border-radius: 4px;
-    cursor: pointer;
-}
-/* 图标 */
-.center_view .usersView .usersBox .usersForm .el-form-item .el-form-item__content .el-upload--picture-card .el-icon{
-    font-size: 32px;
-    color: #999;
-}
-/* 提示语 */
-.center_view .usersView .usersBox .usersForm .el-form-item .el-form-item__content .img-uploader .el-upload__tip{
-    font-size: 15px;
-    color: #999;
-    margin: 0;
-}
-.center_view .el-upload-list--picture-card .el-upload-list__item{
-    border: none;
-}
-/**end**/
-
-/**文件上传**/
-.center_view .usersView .usersBox .usersForm .el-form-item .el-form-item__content .el-upload--text .el-upload-dragger{
-    background: none;
-    border:1px solid #ddd;
-    border-radius: 4px;
-    box-sizing: border-box;
-    width: 100%;
-    height: auto;
-    text-align: center;
-    cursor: pointer;
-    overflow: hidden;
-    padding:0 0 10px;
-    line-height: 1
-}
-.center_view .usersView .usersBox .usersForm .el-form-item .el-form-item__content .el-upload--text .el-upload-dragger .el-icon--upload {
-    color: var(--el-text-color-placeholder);
-    font-size: 60px;
-    line-height: 50px;
-    margin-bottom: 10px;
-}
-/* 图标 */
-.center_view .el-upload--text .el-upload-dragger .el-icon-upload{
-    font-size: 60px;
-    color: var(--theme);
-    line-height: 1;
-    margin-bottom: 0;
-}
-/* 提示语 */
-.center_view .upload-demo .el-upload__tip{
-    font-size: 15px;
-    color: #999;
-    margin: 10px 0 0;
-    line-height:1;
-    padding: 0;
-}
-/* 点击上传 */
-.center_view .el-upload--text .el-upload-dragger em{
-    color: var(--theme);
-    font-size: 15px;
-}
-/**end**/
-
-/**富文本**/
-.center_view .list_editor{
-    width: 100%;
-    height: auto;
-    margin: 0px;
-    padding: 0px;
-    border-radius: 0px;
-    background: rgb(255, 255, 255);
-    /* border: 1px solid var(--theme); */
-    min-height: 300px;
-}
-/**end**/
-
-/**按钮**/
-.center_view .formModel_btn_box{
-    width: 100%;
-    padding: 10px 0px 10px 150px;
-    margin: 40px 0px 0px;
-    /* text-align: right; */
-    display: flex;
-    justify-content: center;
-}
-/**更新信息**/
-.center_view .formModel_btn_box .formModel_confirm{
-    margin: 0px 0px 0px 20px;
-    padding: 0px 24px;
-    width: auto;
-    height: 40px;
-    font-size: 16px;
-    color: rgb(255, 255, 255);
-    border-radius: 0px;
-    border: 0px;
-    cursor: pointer;
-    background: var(--theme);
-    border-radius: 4px;
-}
-.center_view .formModel_btn_box .formModel_confirm:hover{
-    background: var(--theme);
-}
-/**退出登陆**/
-.center_view .formModel_btn_box .formModel_cancel{
-    margin: 0px 0px 0px 20px;
-    padding: 0px 24px;
-    width: auto;
-    height: 40px;
-    font-size: 16px;
-    color: rgb(255, 255, 255);
-    border-radius: 0px;
-    border: 0px;
-    cursor: pointer;
-    background: rgba(142, 142, 142, 1);
-    border-radius: 4px;
-    order: 2;
-}
-.center_view .formModel_btn_box .formModel_cancel:hover{
-    background: rgba(66, 66, 66,1);
-}
-
-
-.center_view .el-form-item .upload-demo {
-    width: 360px;
-}
-
-/* nf9 */
-/* 标题 */
-.center_view .section_title {
-    background-size: 100% 100%;
-    color: #000000;
-    font-size: 26px;
-    line-height: 48px;
-    width: 100%;
-    margin: 30px auto;
-    text-align: left;
-    font-weight: 700;
-background: #EBF2FD;
-border-radius: 20px 20px 20px 20px;
-height: 130px;
-line-height:160px;
-}
-.center_view .section_title span{
-    margin-left:15px;
-    position:relative;
-}
-.center_view .section_title span::before{
-    content:'Personal_Center';
-    font-weight: 400;
-font-size: 14px;
-color: #0949F7;
-    position:absolute;
-    bottom:-20px;
-    left:1px;;
-}
-.center_view .section_title span::after{
-    content:'_________________________';
-    font-weight: 400;
-font-size: 14px;
-color: #0949F7;
-    position:absolute;
-    bottom:-30px;
-    left:1px;;
-}
-
-.center_view .usersView .usersBox .usersForm .el-form-item{
-    margin:10px;
-    display: flex;
-    flex-direction:column;
-  
-  justify-content: flex-start; /* 左对齐 */
-}
-.center_view .usersView .usersBox .usersForm .el-form-item .el-form-item__label{
-    width: 150px !important;
-    background: none;
-    text-align: left;
-    display: block;
-   font-weight: 400;
-font-size: 18px;
-color: #585858;
-    padding-left:10px;
-}
-.center_view .el-form-item .el-input__wrapper{
-    height: 36px;
-    line-height: 36px;
-    padding: 0px 10px;
-    box-sizing: border-box;
-
-    font-size: 16px;
-background: #F8F9FB;
-border-radius: 10px 10px 10px 10px;
-    box-shadow:none;
-}
-.center_view .el-select__wrapper{
-    background: #F8F9FB;
-border-radius: 10px 10px 10px 10px;
-    box-shadow:none;
-}
-
-.center_view .el-textarea__inner{
-       background: #F8F9FB;
-border-radius: 10px 10px 10px 10px;
-    box-shadow:none;
-
-}
-.center_view .el-upload-list--picture-card .el-upload-list__item{
-
-border-radius:10px;
-}
-.center_view .el-upload--picture-card{
-     background: #F8F9FB;
-}
-.center_view .usersView .usersBox .usersForm .el-form-item .el-form-item__content .el-upload--text .el-upload-dragger{
-    border:none;
-     background: #F8F9FB;
-border-radius: 10px 10px 10px 10px;
-}
-
-.center_view .list_editor{
-     background: #F8F9FB;
-border-radius: 10px 10px 10px 10px;
-}
-.center_view .editor-box {
-  border:none;
-}
-.center_view .w-e-bar{
-    background:none;
-}
-.center_view .w-e-text-container{
- background:none;
-}
-.center_view .list_checkbox{
-    background: #F8F9FB;
-border-radius: 10px 10px 10px 10px;
-}
-.center_view .el-checkbox__input{
-    display:none;
-}
-/**tab总盒子**/
-.center_view .usersView .usersTabView{
-    box-sizing: border-box;
-    border-bottom: none;
-    background: none;
-    padding: 10px 0 0;
-    display: flex;
-    column-gap: 20px;
-    flex-wrap: wrap;
-    width: 220px;
-    flex-direction: column;
-    flex-shrink: 0;
-    border-radius: 8px;
-    box-shadow:none;
-    border:none;
-    margin-right: 50px;
-    order: 0;
-}
-/**item**/
-.center_view .usersView .usersTabView .usersTab{
-    padding: 0px 0;
-    box-sizing: border-box;
-    cursor: pointer;
-    color: #333;
-    text-align: center;
     position: relative;
-    line-height: 48px;
-    background: #FFFFFF;
-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.3);
-border-radius: 0px 0px 0px 0px;
+
+    &::before {
+        content: '';
+        position: fixed;
+        top: -200px;
+        left: -200px;
+        width: 600px;
+        height: 600px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(255,107,157,0.08), transparent 70%);
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    &::after {
+        content: '';
+        position: fixed;
+        bottom: -150px;
+        right: -150px;
+        width: 500px;
+        height: 500px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(0,212,255,0.07), transparent 70%);
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    .left-menu {
+        width: 200px;
+        min-width: 200px;
+        background: rgba(255, 255, 255, 0.04);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 107, 157, 0.15);
+        border-radius: 20px;
+        padding: 24px 16px;
+        height: fit-content;
+        position: sticky;
+        top: 32px;
+        z-index: 1;
+
+        .menu-item:nth-of-type(3) {
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            margin-bottom: 8px;
+            padding-bottom: 12px;
+        }
+
+        .menu-item {
+            display: block;
+            width: 100%;
+            padding: 11px 20px;
+            border-radius: 10px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 4px;
+            background: transparent;
+            border: none;
+            text-align: left;
+            box-sizing: border-box;
+
+            .iconfont {
+                margin-right: 10px;
+                font-size: 16px;
+                width: 1.2em;
+            }
+
+            &:hover:not(.is-active) {
+                color: white;
+                background: rgba(255, 107, 157, 0.1);
+                padding-left: 26px;
+            }
+
+            &.is-active {
+                color: #ff6b9d;
+                background: rgba(255, 107, 157, 0.12);
+                border-left: 3px solid #ff6b9d;
+                padding-left: 17px;
+                font-weight: 600;
+            }
+
+            &:first-of-type.is-active {
+                display: block;
+                width: 100%;
+                padding: 12px 20px;
+                border-radius: 12px;
+                background: linear-gradient(135deg, #ff6b9d, #00d4ff);
+                color: white;
+                font-weight: 700;
+                font-size: 15px;
+                text-align: center;
+                margin-bottom: 8px;
+                border: none;
+                box-shadow: 0 8px 20px rgba(255, 107, 157, 0.3);
+
+                .iconfont {
+                    margin-right: 0;
+                }
+            }
+        }
+    }
+
+    .right-content {
+        flex: 1;
+        background: rgba(255, 255, 255, 0.04);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 107, 157, 0.15);
+        border-radius: 20px;
+        padding: 36px 40px;
+        position: relative;
+        overflow-y: auto;
+        z-index: 1;
+
+        &::-webkit-scrollbar {
+            width: 4px;
+        }
+        &::-webkit-scrollbar-thumb {
+            background: rgba(255, 107, 157, 0.3);
+            border-radius: 2px;
+        }
+
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #ff6b9d, #00d4ff);
+            z-index: 2;
+        }
+
+        &::after {
+            content: '';
+            position: absolute;
+            top: -80px;
+            right: -80px;
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.08), transparent 70%);
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .content-box {
+            background: transparent;
+            padding: 0;
+            border-radius: 0;
+            border: none;
+            backdrop-filter: none;
+            margin-bottom: 0;
+
+            .card-title {
+                font-size: 22px;
+                font-weight: bold;
+                margin-bottom: 30px;
+                padding-bottom: 15px;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                color: rgba(255, 255, 255, 0.9);
+            }
+
+            .usersForm {
+                .el-form-item {
+                    margin-bottom: 25px;
+                    
+                    :deep(.el-form-item__label) {
+                        color: rgba(255, 255, 255, 0.55);
+                        font-size: 13px;
+                        font-weight: 500;
+                    }
+                    
+                    &.is-required :deep(.el-form-item__label)::before {
+                        color: #ff6b9d !important;
+                    }
+                }
+
+                :deep(.el-input__wrapper) {
+                    background: rgba(255, 255, 255, 0.06) !important;
+                    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+                    border-radius: 10px !important;
+                    height: 44px !important;
+                    transition: all 0.3s ease !important;
+                    box-shadow: none !important;
+
+                    &:focus-within {
+                        border-color: #ff6b9d !important;
+                        background: rgba(255, 107, 157, 0.06) !important;
+                        box-shadow: 0 0 0 3px rgba(255, 107, 157, 0.12) !important;
+                    }
+                }
+
+                :deep(.el-input__inner) {
+                    color: white !important;
+                    &::placeholder {
+                        color: rgba(255, 255, 255, 0.2) !important;
+                    }
+                }
+
+                :deep(.el-input.is-disabled .el-input__wrapper) {
+                    background: rgba(255, 255, 255, 0.03) !important;
+                    border-color: rgba(255, 255, 255, 0.06) !important;
+                    cursor: default !important;
+                }
+                
+                :deep(.el-input.is-disabled .el-input__inner) {
+                    color: rgba(255, 255, 255, 0.35) !important;
+                    cursor: default !important;
+                }
+
+                .list_radio {
+                    :deep(.el-radio__label) {
+                        color: rgba(255, 255, 255, 0.75) !important;
+                    }
+                    :deep(.el-radio__inner) {
+                        background: rgba(255,255,255,0.08) !important;
+                        border-color: rgba(255,255,255,0.2) !important;
+                    }
+                    :deep(.el-radio__input.is-checked .el-radio__inner) {
+                        background: #ff6b9d !important;
+                        border-color: #ff6b9d !important;
+                    }
+                    :deep(.el-radio__input.is-checked + .el-radio__label) {
+                        color: #ff6b9d !important;
+                    }
+                }
+
+                :deep(.el-upload-list--picture-card .el-upload-list__item) {
+                    width: 100px !important;
+                    height: 100px !important;
+                    border-radius: 16px !important;
+                    border: 2px solid rgba(255, 107, 157, 0.4) !important;
+                    box-shadow: 0 0 20px rgba(255, 107, 157, 0.2) !important;
+                    transition: all 0.3s ease !important;
+                    background: transparent !important;
+                    margin: 0 8px 8px 0 !important;
+
+                    img {
+                        object-fit: cover;
+                        border-radius: 12px;
+                    }
+
+                    &:hover {
+                        border-color: #ff6b9d !important;
+                        box-shadow: 0 0 28px rgba(255, 107, 157, 0.4) !important;
+                        transform: scale(1.04);
+                    }
+                }
+
+                :deep(.el-upload--picture-card) {
+                    width: 100px !important;
+                    height: 100px !important;
+                    border-radius: 16px !important;
+                    border: 2px dashed rgba(255, 107, 157, 0.35) !important;
+                    background: rgba(255, 107, 157, 0.05) !important;
+                    transition: all 0.3s ease !important;
+                    
+                    .el-icon {
+                        font-size: 28px !important;
+                        color: rgba(255, 107, 157, 0.5) !important;
+                        transition: all 0.3s ease !important;
+                    }
+
+                    &:hover {
+                        border-color: #ff6b9d !important;
+                        background: rgba(255, 107, 157, 0.1) !important;
+                        box-shadow: 0 0 16px rgba(255, 107, 157, 0.2) !important;
+
+                        .el-icon {
+                            color: #ff6b9d !important;
+                        }
+                    }
+                }
+
+                :deep(.el-upload__tip) {
+                    color: rgba(255, 255, 255, 0.3) !important;
+                    font-size: 12px !important;
+                    margin-top: 8px !important;
+                    line-height: 1.5;
+                }
+
+                .list_inp,
+                .list_date {
+                    width: 100%;
+                }
+
+                .vip_item {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+
+                    .vip_inp {
+                        flex: 1;
+                    }
+
+                    .vip_btn {
+                        height: 40px;
+                        padding: 0 24px;
+                        border-radius: 10px;
+                        background: rgba(0, 212, 255, 0.15) !important;
+                        border: 1px solid rgba(0, 212, 255, 0.4) !important;
+                        color: #00d4ff !important;
+                        font-weight: 600 !important;
+                        transition: all 0.3s ease !important;
+
+                        &:hover {
+                            background: rgba(0, 212, 255, 0.25) !important;
+                            box-shadow: 0 0 16px rgba(0, 212, 255, 0.35) !important;
+                        }
+                    }
+                }
+
+                .formModel_btn_box {
+                    display: flex;
+                    justify-content: flex-end;
+                    gap: 15px;
+                    margin-top: 30px;
+
+                    .formModel_confirm {
+                        height: 44px;
+                        padding: 0 32px;
+                        border-radius: 10px;
+                        background: linear-gradient(135deg, #ff6b9d, #00d4ff) !important;
+                        border: none !important;
+                        color: white !important;
+                        font-weight: 600 !important;
+                        font-size: 14px !important;
+                        transition: all 0.3s ease !important;
+
+                        &:hover {
+                            box-shadow: 0 8px 20px rgba(255, 107, 157, 0.4) !important;
+                            transform: translateY(-2px) !important;
+                        }
+                    }
+
+                    .formModel_cancel {
+                        height: 44px;
+                        padding: 0 32px;
+                        border-radius: 10px;
+                        background: rgba(255, 255, 255, 0.05) !important;
+                        border: 1px solid rgba(255, 255, 255, 0.12) !important;
+                        color: rgba(255, 255, 255, 0.55) !important;
+                        font-size: 14px !important;
+                        transition: all 0.3s ease !important;
+
+                        &:hover {
+                            border-color: rgba(255, 107, 157, 0.4) !important;
+                            color: #ff6b9d !important;
+                            background: rgba(255, 107, 157, 0.08) !important;
+                        }
+                    }
+                }
+            }
+
+            .coupon-list {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                gap: 20px;
+
+                .item {
+                    background: linear-gradient(135deg, #1a1a2e, #16213e);
+                    border-radius: 10px;
+                    padding: 20px;
+                    border: 1px solid rgba(255, 107, 157, 0.2);
+                    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+                    transition: all 0.3s;
+
+                    &:hover {
+                        transform: translateY(-5px);
+                        box-shadow: 0 6px 20px rgba(0, 212, 255, 0.3);
+                        border-color: rgba(0, 212, 255, 0.5);
+                    }
+
+                    &.disabled {
+                        filter: grayscale(1);
+                        opacity: 0.5;
+                    }
+                }
+            }
+        }
+    }
 }
-.center_view .usersView .usersTabView .usersTab:hover{
-    background: var(--theme);
+
+.glass-card {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-gradient {
+    background: linear-gradient(135deg, var(--theme-color, #409eff), var(--theme-color-dark, #66b1ff));
+    border: none;
     color: #fff;
-}
-.center_view .usersView .usersTabView .usersTab.usersTabActive{
-     background: #FFFFFF;
-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.3);
-border-radius: 0px 0px 0px 0px;
-    border-left:5px solid var(--theme);
-    color: var(--theme)
+    transition: all 0.3s;
+
+    &:hover {
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
 }
 
-.usersTabView .usersTabHoverView {
-    background: #fff;
-    color: #000;
-    z-index: 9;
-}
-.usersTabView .usersTabHoverTab {
-    line-height: 44px;
-    font-size: 14px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    color: #666;
-    padding: 0;
-    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.3);
-border-radius: 0px 0px 0px 0px;
+.btn-plain {
+    background: transparent;
+    border: 1px solid var(--theme-color, #409eff);
+    color: var(--theme-color, #409eff);
+
+    &:hover {
+        background: var(--theme-color, #409eff);
+        color: #fff;
+    }
 }
 
-.usersTabView .usersTabHoverTab:hover {
-    color: var(--theme);
+.noList {
+    text-align: center;
+    color: #999;
+    padding: 40px 0;
+}
+
+:deep(.el-dialog.rechargeDialog) {
+    border-radius: 15px;
+
+    .el-dialog__header {
+        padding-bottom: 15px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .el-dialog__body {
+        padding: 30px;
+    }
+}
+
+:deep(.el-dialog.chat-dialog) {
+    .chat-content {
+        height: 400px;
+    }
 }
 </style>

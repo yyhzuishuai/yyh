@@ -1,6 +1,6 @@
 <template>
     <div class="list-page">
-        <div class="breadcrumb-wrapper" style="width: 100%;">
+        <div class="breadcrumb-wrapper">
             <div class="bread_view">
                 <el-breadcrumb separator=">" class="breadcrumb">
                     <el-breadcrumb-item class="first_breadcrumb" :to="{ path: '/' }">首页</el-breadcrumb-item>
@@ -8,16 +8,16 @@
                 </el-breadcrumb>
             </div>
             <div class="back_view" v-if="centerType">
-                <el-button class="back_btn" @click="backClick">返回</el-button>
+                <el-button class="back_btn btn-gradient" @click="backClick">返回</el-button>
             </div>
         </div>
-		<div class="list_search">
+		<div class="list_search glass-card">
 			<div class="search_view">
 				<div class="search_label">
 					商品名称：
 				</div>
 				<div class="search_box">
-					<el-input class="search_inp" v-model="searchQuery.shangpinmingcheng" placeholder="商品名称"
+					<el-input class="search_inp input-dark" v-model="searchQuery.shangpinmingcheng" placeholder="请输入商品名称"
 						clearable>
 					</el-input>
 				</div>
@@ -28,10 +28,10 @@
                 </div>
                 <div class="search_box">
                     <el-select
-                        class="search_sel"
+                        class="search_sel input-dark"
                         clearable
                         v-model="searchQuery.shangpinleixing"
-                        placeholder="商品类型"
+                        placeholder="请选择商品类型"
                     >
                         <el-option v-for="item in shangpinleixingLists" :label="item" :value="item"></el-option>
                     </el-select>
@@ -41,18 +41,19 @@
 				<div class="search_label">
 					价格：
 				</div>
-				<div class="search_box">
-					<el-input class="search_inp" v-model="searchQuery.priceStart" placeholder="最小价格"
+				<div class="search_box price_range">
+					<el-input class="search_inp input-dark" v-model="searchQuery.priceStart" placeholder="最小价格"
 						clearable>
-					</el-input>至
-					<el-input class="search_inp" v-model="searchQuery.priceEnd" placeholder="最大价格"
+					</el-input>
+                    <span class="range_divider">-</span>
+					<el-input class="search_inp input-dark" v-model="searchQuery.priceEnd" placeholder="最大价格"
 						clearable>
 					</el-input>
 				</div>
 			</div>
 			<div class="search_btn_view">
-				<el-button class="search_btn" @click="searchClick">搜索</el-button>
-				<el-button class="add_btn" v-if="btnAuth('dongmanshangpin','新增')" @click="addClick">新增</el-button>
+				<el-button class="search_btn btn-gradient" @click="searchClick">搜索</el-button>
+				<el-button class="add_btn btn-gradient" v-if="btnAuth('dongmanshangpin','新增')" @click="addClick">新增</el-button>
 			</div>
 		</div>
 
@@ -61,25 +62,25 @@
                 <el-icon class="icon" v-if="sortType!='price'"><DCaret /></el-icon>
                 <el-icon class="icon desc" v-else-if="sortOrder=='desc'"><SortDown /></el-icon>
                 <el-icon class="icon asc" v-else><SortUp /></el-icon>
-                价格
+                <span :class="{'text-gradient': sortType=='price'}">价格</span>
             </el-button>
             <el-button class="item storeup" @click="sortClick('storeupNumber')" :class="{active:sortType=='storeupNumber'}">
                 <el-icon class="icon" v-if="sortType!='storeupNumber'"><DCaret /></el-icon>
                 <el-icon class="icon desc" v-else-if="sortOrder=='desc'"><SortDown /></el-icon>
                 <el-icon class="icon asc" v-else><SortUp /></el-icon>
-                收藏数
+                <span :class="{'text-gradient': sortType=='storeupNumber'}">收藏数</span>
             </el-button>
             <el-button class="item thumbsup" @click="sortClick('thumbsupNumber')" :class="{active:sortType=='thumbsupNumber'}">
                 <el-icon class="icon" v-if="sortType!='thumbsupNumber'"><DCaret /></el-icon>
                 <el-icon class="icon desc" v-else-if="sortOrder=='desc'"><SortDown /></el-icon>
                 <el-icon class="icon asc" v-else><SortUp /></el-icon>
-                点赞数
+                <span :class="{'text-gradient': sortType=='thumbsupNumber'}">点赞数</span>
             </el-button>
         </div>
 
 
                 <div class="data_view">
-<div class="item" v-for="(item,index) in list" @click.stop="detailClick(item.id)">
+<div class="item glass-card animate-fade-up" v-for="(item,index) in list" :key="item.id" @click.stop="detailClick(item.id)" :style="{animationDelay: index*0.08+'s'}">
   
       <div class="img_box">
         
@@ -98,23 +99,22 @@
                                 </span>
                             </div>
 
-    <div class="data_price"><span>￥</span><span>{{item.price}}</span></div>
+    <div class="data_price"><span class="price-num">￥{{item.price}}</span></div>
     <div class="count-row">
-                                <div class="data_like" v-if="item.thumbsupNumber">
+                                <div class="data_like">
                                     <span class="iconfont icon-thumb-up-line1"></span>
-                                    <div class="like_num">{{item.thumbsupNumber}}</div>
+                                    <div class="like_num">{{item.thumbsupNumber || 0}}</div>
                                 </div>
 
-                                <div class="data_collect" v-if="item.storeupNumber">
+                                <div class="data_collect">
                                     <span class="iconfont icon-likeline4"></span>
-                                    <div class="collect_num">{{item.storeupNumber}}</div>
+                                    <div class="collect_num">{{item.storeupNumber || 0}}</div>
                                 </div>
-
-
     </div>
   </div>
 </div>
                 </div>
+
 
 				<el-pagination
 					background
@@ -331,4 +331,268 @@
 	init()
 </script>
 <style lang="scss" scoped>
+.list-page {
+    background: transparent !important;
+    min-height: 100vh;
+    padding: 30px 7%;
+    width: 100%;
+}
+
+.breadcrumb-wrapper {
+    margin-bottom: 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .breadcrumb {
+        font-size: 16px;
+        
+        ::v-deep .el-breadcrumb__inner {
+            color: var(--color-gray) !important;
+            &.is-link:hover {
+                color: var(--color-pink) !important;
+            }
+        }
+        
+        ::v-deep .el-breadcrumb__separator {
+            color: var(--color-pink) !important;
+            font-weight: bold;
+        }
+    }
+}
+
+.list_search {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 30px;
+    background: rgba(255, 255, 255, 0.05) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 107, 157, 0.2);
+    border-radius: 20px;
+    padding: 24px;
+    
+    .search_view {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        
+        .search_label {
+            color: var(--color-gray);
+            font-size: 14px;
+            white-space: nowrap;
+        }
+        
+        .search_box {
+            width: 200px;
+            
+            &.price_range {
+                width: auto;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                
+                .range_divider {
+                    color: var(--color-gray);
+                }
+                
+                .search_inp {
+                    width: 120px;
+                }
+            }
+        }
+    }
+    
+    ::v-deep .el-input__wrapper, ::v-deep .el-select__wrapper {
+        background: rgba(255, 255, 255, 0.05) !important;
+        box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1) inset !important;
+        border-radius: 12px;
+        
+        .el-input__inner, .el-select__placeholder {
+            color: #ffffff !important;
+            &::placeholder {
+                color: rgba(255, 255, 255, 0.3) !important;
+            }
+        }
+    }
+
+    ::v-deep .el-select__caret {
+        color: var(--color-pink) !important;
+    }
+}
+
+.sort-wrapper {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    padding: 12px 20px;
+    margin-bottom: 30px;
+    display: flex;
+    gap: 15px;
+    
+    .item {
+        background: transparent;
+        border: none;
+        color: var(--color-gray);
+        font-size: 15px;
+        transition: var(--transition);
+        padding: 8px 16px;
+        
+        &:hover {
+            color: #ffffff;
+        }
+        
+        &.active {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+        
+        .icon {
+            margin-right: 6px;
+        }
+    }
+}
+
+.data_view {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 24px !important;
+    margin: 30px 0 40px !important;
+    width: 100% !important;
+    
+    .item {
+        background: rgba(255, 255, 255, 0.05) !important;
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 107, 157, 0.18) !important;
+        border-radius: 20px !important;
+        overflow: hidden;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+        position: relative;
+        width: 100% !important;
+        margin: 0 !important;
+        
+        &:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(255, 107, 157, 0.18);
+            border-color: rgba(255, 107, 157, 0.45) !important;
+            
+            .img_box img {
+                transform: scale(1.08);
+            }
+        }
+        
+        .img_box {
+            width: 100% !important;
+            height: 220px;
+            overflow: hidden;
+            border-radius: 16px 16px 0 0;
+            display: block;
+            
+            img {
+                width: 100% !important;
+                height: 100% !important;
+                object-fit: cover;
+                display: block;
+                transition: transform 0.4s ease;
+            }
+        }
+        
+        .content {
+            padding: 14px 16px;
+            
+            .data_title {
+                margin-bottom: 8px;
+                color: rgba(255, 255, 255, 0.55);
+                font-size: 13px;
+                @extend .text-one-row;
+            }
+            
+            .data_price {
+                margin: 8px 0;
+                
+                .price-num {
+                    background: linear-gradient(135deg, #ff6b9d, #00d4ff);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    font-size: 22px;
+                    font-weight: 700;
+                    display: inline-block;
+                }
+            }
+            
+            .count-row {
+                display: flex;
+                gap: 10px;
+                margin-top: 12px;
+                
+                .data_like, .data_collect {
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                    padding: 6px 16px;
+                    border-radius: 50px;
+                    font-size: 13px;
+                    transition: all 0.3s ease;
+                    cursor: pointer;
+                }
+                
+                .data_like {
+                    background: rgba(0, 212, 255, 0.12);
+                    color: #00d4ff;
+                    border: 1px solid rgba(0, 212, 255, 0.3);
+                    
+                    &:hover {
+                        background: rgba(0, 212, 255, 0.22);
+                        box-shadow: 0 0 14px rgba(0, 212, 255, 0.5);
+                    }
+                }
+                
+                .data_collect {
+                    background: rgba(255, 107, 157, 0.12);
+                    color: #ff6b9d;
+                    border: 1px solid rgba(255, 107, 157, 0.3);
+                    
+                    &:hover {
+                        background: rgba(255, 107, 157, 0.22);
+                        box-shadow: 0 0 14px rgba(255, 107, 157, 0.5);
+                    }
+                }
+            }
+        }
+    }
+}
+
+::v-deep .el-pagination {
+    justify-content: center;
+    .el-pager li {
+        background: rgba(255, 255, 255, 0.05) !important;
+        color: var(--color-gray) !important;
+        border-radius: 8px;
+        &:hover {
+            color: var(--color-pink) !important;
+        }
+        &.is-active {
+            background: linear-gradient(45deg, var(--color-pink), var(--color-blue)) !important;
+            color: #ffffff !important;
+        }
+    }
+    .btn-prev, .btn-next {
+        background: rgba(255, 255, 255, 0.05) !important;
+        color: var(--color-gray) !important;
+        border-radius: 8px;
+        &:disabled {
+            opacity: 0.3;
+        }
+    }
+}
+
+.text-one-row {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 </style>

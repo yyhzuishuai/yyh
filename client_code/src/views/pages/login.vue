@@ -147,56 +147,107 @@
 	})
 </script>
 
-<style lang="scss">
-	.login_view {
-        background-image: url("http://clfile.zggen.cn/20250920/bbbb3b669b3a40c6a7fbbfa205614414.png")!important;
-	}
+<style lang="scss" scoped>
 .login_view {
-    background:url(http://clfile.zggen.cn/20250905/d751839d83b74ad6bff70d69de0ae8fe.jpg) no-repeat center top / 100% 100%;
-    min-height: 100vh;
+    background: url('~@/assets/images/login-bg.jpg') no-repeat center center;
+    background-size: cover;
+    width: 100vw;
+    height: 100vh;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end; /* Align card to the right */
+    padding-right: 15%; /* Add space from the right edge */
     position: relative;
     overflow: hidden;
+
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0) 70%);
+        pointer-events: none;
+    }
+
+    &::after {
+        display: none; 
+    }
 }
 
 .login_view .form {
-    
-    background: #fff;
-    width: 560px;
-    margin-right:30%;
-    padding: 0;
+    background: rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 28px;
+    padding: 48px 44px;
+    width: 420px;
+    /* margin: 0; <- Removed to allow flex positioning */
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    position: relative;
+    z-index: 2;
     overflow: hidden;
-   border-radius: 30px 30px 30px 30px;
+    box-shadow: 
+        0 0 0 1.5px rgba(255, 255, 255, 0.7) inset,
+        0 32px 64px rgba(0, 0, 0, 0.1);
+    animation: fadeInUp 0.6s ease forwards;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 50%;
+        transform: translateX(-50%);
+        width: 60%;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.7), transparent);
+    }
+
+    &::after {
+        display: none;
+    }
 }
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
 .login_view .form2 {
     width: 100%;
-    background: rgba(255,255,255,.8);
-    padding: 20px 40px;
-    border: 0px solid #DDA0DD;
-    border-bottom-left-radius: 50% 20px;
-    border-bottom-right-radius: 50% 20px;
-    border-top-left-radius: 10% 20px;
-    border-top-right-radius: 10% 20px;
+    background: transparent;
+    padding: 0;
     position: relative;
-      display: flex;                
+    display: flex;                
     flex-direction: column;       
     align-items: center;          
     justify-content: center;      
 }
 
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
 .login_view .projectName {
-    font-size: 20px;
-   color: #000000;
+    font-size: 18px;
     font-weight: 700;
-    width: 100%;
     text-align: center;
-    margin-top: 20px;
-    text-shadow: 0px 0px 0px rgba(0, 0, 0, 0.3);
+    line-height: 1.6;
+    margin-bottom: 32px;
+    color: #6B46C1; /* Deeper purple */
+    letter-spacing: 0.5px;
+    position: relative;
+
+    &::after {
+        content: '';
+        display: block;
+        width: 48px;
+        height: 2px;
+        margin: 12px auto 0;
+        border-radius: 2px;
+        background: #D6BCFA; /* Lighter purple */
+    }
 }
 
 .login_view .tip {
@@ -261,29 +312,27 @@
 }
 
 .login_view .forget-row {
-    width: 90%;
+    width: 100%;
     display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
+    justify-content: flex-end;
+    margin-top: 5px;
 }
 
 .login_view .register {
-    background: none;
-    border: none;
-    font-size: 16px;
+    background: none !important;
+    border: none !important;
+    color: #718096 !important;
+    font-size: 13px !important;
+    cursor: pointer !important;
+    transition: color 0.3s ease !important;
+    display: block !important;
+    margin-bottom: 24px !important;
+    text-decoration: none !important;
+    padding: 0 !important;
 }
 
-.login_view .register:hover{
-    color:var(--theme);
-}
-
-.login_view .forget {
-    background: none;
-    border: 0;
-    font-size: 16px;   
-}
-.login_view .forget:hover{
-    color:var(--theme);
+.login_view .register:hover {
+    color: #805AD5 !important; /* Deeper purple for hover */
 }
 
 .login_view .logo {
@@ -297,30 +346,48 @@
 
 
 .login_view .form-item {
-    width: 90%;
-    margin:10px auto 0px auto!important;
+    width: 100%;
+    margin: 0 0 20px 0 !important;
     display: flex;
-      flex-direction: column;  
+    flex-direction: column;  
     align-items: flex-start; 
-    background: #fff !important;
+    background: transparent !important;
     padding: 0;
-   
-    line-height: 50px;
-    border-radius: 10px;
+    line-height: normal;
 }
-.login_view .el-input__wrapper {
-    border-radius: 5px 5px 5px 5px;
-border: 1px solid #9CA3AF;    
-outline: none;
-     box-shadow:none!important;
-    padding: 0;
-    background: none!important;
-}
+
 .login_view .label {
-    background: none;
-    color: #9ca3af;
-    padding: 0 10px;
-    line-height:20px;
+    color: #4A5568;
+    font-size: 13px;
+    margin-bottom: 8px;
+    padding: 0;
+    line-height: 1;
+    display: block;
+}
+
+::v-deep .el-input__wrapper {
+    background: rgba(255, 255, 255, 0.75) !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) inset !important;
+    border-radius: 12px !important;
+    height: 46px !important;
+    padding: 0 16px !important;
+    transition: all 0.3s ease !important;
+    outline: none !important;
+}
+
+::v-deep .el-input__inner {
+    color: #2D3748 !important;
+    font-size: 14px !important;
+    height: 46px !important;
+}
+
+::v-deep .el-input__inner::placeholder {
+    color: #718096 !important;
+}
+
+::v-deep .el-input__wrapper.is-focus {
+    box-shadow: 0 0 0 3px rgba(214, 188, 250, 0.6), 0 1px 2px rgba(0, 0, 0, 0.05) inset !important;
+    background: rgba(255, 255, 255, 0.85) !important;
 }
 .login_view .form-item .el-select .el-select__wrapper{
     background: none;
@@ -351,14 +418,30 @@ border: 1px solid #9CA3AF;
 
 
 .login_view .login {
-    width: 90%;
-    margin:20px auto 0px auto!important;
-    height: 50px;
-    background: var(--theme);
-    border: none;
-    color: #fff;
-    font-size: 18px;
-    border-radius: 5px;
+    width: 100% !important;
+    height: 48px !important;
+    border: none !important;
+    border-radius: 12px !important;
+    background: linear-gradient(135deg, #D6BCFA 0%, #A78BFA 100%) !important; /* Soft purple gradient */
+    color: #FFFFFF !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+    letter-spacing: 2px !important;
+    transition: all 0.4s ease !important;
+    position: relative !important;
+    overflow: hidden !important;
+    margin: 0 !important;
+}
+
+.login_view .login:hover {
+    background: linear-gradient(135deg, #A78BFA 0%, #805AD5 100%) !important; /* Darker purple gradient on hover */
+    box-shadow: 0 8px 24px rgba(128, 90, 213, 0.3) !important;
+    transform: translateY(-2px) !important;
+}
+
+.login_view .login:active {
+    transform: translateY(0px) !important;
 }
 .login_view .face{
     width: 90%;

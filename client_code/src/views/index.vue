@@ -1,91 +1,82 @@
 <template>
 	<div id="index" class="main-containers">
         <div class="index_top">
-<div class="top-header">
-    <div class="headertop">
-
-        <div class="top-right"> 
-
-
-        </div>
-    
-    </div>
-    <div class="headerbottom">
-           <div class="projectName">{{projectName}}</div>
-
-				<div v-if="Token" class="cart" style="cursor: pointer" @click="menuHandler('/index/cartList')">
-					<i class="iconfont icon-gouwuche1"></i>
-					<span>购物车</span>
-				</div>
-
-				<el-button v-if="!Token" class="login" @click="loginClick">
-                    <el-icon><User/></el-icon>登录
-				</el-button>
-
-				<div class="user" v-if="Token">
-					<el-dropdown class="avatar-container" trigger="hover">
-						<div class="avatar-wrapper">
-							<img class="user-avatar" :src="store.getters['user/avatar']" style="width: 50px">
-							<div class="nickname">{{store.getters['user/username']}}</div>
-							<el-icon class="el-icon-arrow-down">
-								<arrow-down />
-							</el-icon>
-						</div>
-						<template #dropdown>
-							<el-dropdown-menu class="user-dropDown" slot="dropdown">
-								<el-dropdown-item @click="menuHandler('center')" class="center">
-									<span>个人中心</span>
-								</el-dropdown-item>
-								<el-dropdown-item @click="loginOut" class="loginOut">
-									<span>退出登录</span>
-								</el-dropdown-item>
-							</el-dropdown-menu>
-						</template>
-					</el-dropdown>
-				</div>
- 
-    </div>
-
-</div>
-            <div class="menu-wrapper">
-                <el-scrollbar wrap-class="scrollbar-wrapper" class="menu_scrollbar">
-                    <el-menu :unique-opened="true" :default-active="menuIndex"
-                         class="menu_view" mode="horizontal" @select="menuChange"
-                         :key="menuIndex"  :ellipsis="false">
-                        <el-menu-item class="first-item" index="/index/home" @click="menuHandler('/')">
-                            <i class="iconfont icon-zhuye2"></i>
-                            <template #title>
-                                <span>首页</span>
-                            </template>
-                        </el-menu-item>
-                        <template v-for="(menu,index) in menuList" :key="menu.menu">
-                            <el-sub-menu v-if="menu.child.length>1" :index="menu.name" class="first-item" :teleported="true">
-                                <template #title>
-                                    <i class="iconfont" :class="menu.icon"></i>
-                                    <span>{{ menu.name }}</span>
+            <div class="nav-sticky-container">
+                <div class="top-header">
+                    <div class="headertop">
+                        <div class="top-right"></div>
+                    </div>
+                    <div class="headerbottom">
+                        <div class="projectName text-gradient">{{projectName}}</div>
+                        <div v-if="Token" class="cart" style="cursor: pointer" @click="menuHandler('/index/cartList')">
+                            <i class="iconfont icon-gouwuche1"></i>
+                            <span>购物车</span>
+                        </div>
+                        <el-button v-if="!Token" class="login btn-gradient" @click="loginClick">
+                            <el-icon><User/></el-icon>登录
+                        </el-button>
+                        <div class="user" v-if="Token">
+                            <el-dropdown class="avatar-container" trigger="hover">
+                                <div class="avatar-wrapper">
+                                    <img class="user-avatar" :src="store.getters['user/avatar']" style="width: 50px">
+                                    <div class="nickname">{{store.getters['user/username']}}</div>
+                                    <el-icon class="el-icon-arrow-down">
+                                        <arrow-down />
+                                    </el-icon>
+                                </div>
+                                <template #dropdown>
+                                    <el-dropdown-menu class="user-dropDown" slot="dropdown">
+                                        <el-dropdown-item @click="menuHandler('center')" class="center">
+                                            <span>个人中心</span>
+                                        </el-dropdown-item>
+                                        <el-dropdown-item @click="loginOut" class="loginOut">
+                                            <span>退出登录</span>
+                                        </el-dropdown-item>
+                                    </el-dropdown-menu>
                                 </template>
-                                <el-menu-item class="second-item" v-for=" (child,index1) in menu.child" :key="index1"
-                                              :index="child.url" @click="menuHandler(child.url)">{{ child.name }}
-                                </el-menu-item>
-                            </el-sub-menu>
-                            <el-menu-item v-else :index="menu.child[0].url" class="first-item" @click="menuHandler(menu.child[0].url)">
-                                <i class="iconfont" :class="menu.icon"></i>
+                            </el-dropdown>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-wrapper">
+                    <el-scrollbar wrap-class="scrollbar-wrapper" class="menu_scrollbar">
+                        <el-menu :unique-opened="true" :default-active="menuIndex"
+                             class="menu_view" mode="horizontal" @select="menuChange"
+                             :key="menuIndex"  :ellipsis="false">
+                            <el-menu-item class="first-item" index="/index/home" @click="menuHandler('/')">
+                                <i class="iconfont icon-zhuye2"></i>
                                 <template #title>
-                                    <span>{{menu.child[0].name}}</span>
+                                    <span>首页</span>
                                 </template>
                             </el-menu-item>
-                        </template>
-                        <el-menu-item v-if="Token" :index="`/index/${context.$toolUtil.storageGet('frontSessionTable')}Center`" class="first-item" @click="menuHandler('center')">
-                            <i class="iconfont icon-user1"></i>
-                            <template #title>
-                                <span>个人中心</span>
+                            <template v-for="(menu,index) in menuList" :key="menu.menu">
+                                <el-sub-menu v-if="menu.child.length>1" :index="menu.name" class="first-item" :teleported="true">
+                                    <template #title>
+                                        <i class="iconfont" :class="menu.icon"></i>
+                                        <span>{{ menu.name }}</span>
+                                    </template>
+                                    <el-menu-item class="second-item" v-for=" (child,index1) in menu.child" :key="index1"
+                                                  :index="child.url" @click="menuHandler(child.url)">{{ child.name }}
+                                    </el-menu-item>
+                                </el-sub-menu>
+                                <el-menu-item v-else :index="menu.child[0].url" class="first-item" @click="menuHandler(menu.child[0].url)">
+                                    <i class="iconfont" :class="menu.icon"></i>
+                                    <template #title>
+                                        <span>{{menu.child[0].name}}</span>
+                                    </template>
+                                </el-menu-item>
                             </template>
-                        </el-menu-item>
-                    </el-menu>
-                </el-scrollbar>
+                            <el-menu-item v-if="Token" :index="`/index/${context.$toolUtil.storageGet('frontSessionTable')}Center`" class="first-item" @click="menuHandler('center')">
+                                <i class="iconfont icon-user1"></i>
+                                <template #title>
+                                    <span>个人中心</span>
+                                </template>
+                            </el-menu-item>
+                        </el-menu>
+                    </el-scrollbar>
+                </div>
             </div>
-
-			<div class="rotation_view" >
+            <div class="rotation_view" >
 				<mySwiper :type="3" :data="rotationList" :autoHeight="false" :autoplay="true"
 					:loop="false" :navigation="true" :pagination="true"
 					paginationType="1" :scrollbar="false" slidesPerView="1"
@@ -101,7 +92,7 @@
         </div>
 		<el-scrollbar class="contain_view body-containers">
 			<router-view :key="routerKey"/>
-			<el-backtop :right="100" :bottom="100" />
+			<el-backtop :right="40" :bottom="100" />
 			<div class="bottom_view ql-snow ql-editor">
                 
 			</div>
@@ -286,204 +277,164 @@
         top: -4px;
         right: -10px;
     }
+.nav-sticky-container {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: rgba(13, 13, 26, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 107, 157, 0.15);
+    
+    &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: linear-gradient(90deg, var(--color-pink), var(--color-blue));
+    }
+}
+
 .index_top .top-header {
     width: 100%;
     padding: 0px;
-    background: var(--theme);
-    margin:0 auto;
+    background: transparent;
+    margin: 0 auto;
     display: flex;
-      flex-direction: column; 
-    gap: 10px; 
+    flex-direction: column; 
+    gap: 0; 
     align-items: center;
     color: #fff;
-    border-radius: 0px 0px 0 0;
-    font-size: 16px;
 }
+
 .index_top .projectName {
     margin-right: auto;
     font-size: 24px;
-    color: #fff;
-    font-weight: 500;
+    font-weight: 700;
     white-space: nowrap;
-}
-.index_top .weather {
-    color: #fff;
-    white-space: nowrap;
-    margin: 5px 0 0;
-}
-.index_top .notice-btn{
-    background:none;
-    padding: 0 0 0 30px;
-    border: none;
-    color: #fff;
-    margin: 0 20px;
-}
-.index_top .login{
-    background: none;
-    border: 0px solid #ffffff50;
-    color: #fff;
-    font-size: 16px;
-    margin: 0 20px 0 0;
 }
 
-.index_top .avatar-wrapper {
+.index_top .login {
+    margin: 0;
+}
+
+.headerbottom {
+    width: 100%;
     display: flex;
     align-items: center;
-    gap: 6px;
-}
-.index_top img.user-avatar {
-    width: 40px!important;
-    height: 40px;
-}
-.index_top .avatar-wrapper .nickname{
-    color: #fff;
-    white-space: nowrap;
-}
-.index_top .avatar-wrapper .el-icon{
-    color: #fff;   
-}
-.index_top .chat{
-    white-space: nowrap;
-    margin: 0 20px 0 0;
-}
-.index_top .cart{
-    white-space: nowrap;
-    margin: 0 20px 0 0;
+    background: transparent;
+    padding: 15px 40px;
+    gap: 20px;
 }
 
-.headertop {
-    width:100%;
-     display: flex;
-       align-items: center;
-    padding:0px 40px;
-}
-.top-right{
-       margin-left:auto;
-display: flex;
-       align-items: center;
-}
-
-.headerbottom{
-      
-  width:100%;
-     display: flex;
-       align-items: center;
-    background: #567FEE;
-    padding:10px 40px;
-}
-.bottom_view {
+.menu-wrapper {
     width: 100%;
-    padding: 20px 7%;
+    padding: 0 7%;
     margin: 0 auto;
-    min-height: 100px;
-    background: #000000;
-    color: #fff;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    align-content: center;
-    justify-content: center;
-    border-radius: 0 0 0px 0px;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    overflow: visible;
 }
 
-
-.el-backtop {
-    right:40px !important;
-}
-.main-containers{
-    background:#f5f7fa;
-}
-#index {
-    background: #f5f7fa;
-}
-.menu-wrapper{
-    
-    width: 100%;
-    padding:10px 7%;
-    margin: 0px auto 0px;
-    background: #fff;
-    border-top: 0px solid #f0f0f0;
-    font-size: 16px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
-    border-radius: 0px;
-    overflow-y: hidden;
-}
-.menu-wrapper .el-scrollbar__view{
-}
 .menu-wrapper ul.el-menu.el-menu--horizontal.menu_view {
-    font-size: 16px;
-    background: none;
-    height: 50px;
-    display: flex;
-    justify-content: center;
-}
-.menu-wrapper .el-menu--horizontal.el-menu {
-    border-bottom:0px;
+    background: transparent;
+    border: none;
+    height: 60px;
 }
 
-.menu-wrapper .el-menu--horizontal>.el-menu-item {
-    align-items: center;
-    border-bottom: 0px solid transparent;
-    color: #333;
-    font-size: 16px;
-    margin-right:20px;
-    border-radius: 30px;
-    padding: 0;
-}
-.menu-wrapper .el-menu--horizontal>.el-menu-item i{
-    margin: 0 3px 0 0;
-}
-.menu-wrapper .el-menu--horizontal>.el-menu-item:hover{
-    background: #fff !important; 
-    color: var(--theme) !important; 
-    border-bottom: 0px solid var(--theme);
-}
-.menu-wrapper .el-menu--horizontal>.el-menu-item.is-active{
-    background: #fff !important; 
-    color: var(--theme) !important; 
-    border-bottom: 0px solid var(--theme);
-}
-
-
-.menu-wrapper .menu_view .first-item{
+.menu-wrapper .el-menu--horizontal > .el-menu-item {
+    color: rgba(255, 255, 255, 0.75) !important;
+    font-weight: 500;
+    transition: var(--transition);
     position: relative;
-    background: #fff;
-    border-radius: 30px;
-    margin-right:20px;
-    padding: 0;
-}
-.menu-wrapper .menu_view .first-item .el-sub-menu__title{
-    color: #333;
-    font-size: 16px;
-    border-radius: 30px;
-    padding: 0 20px 0 0;
+    background: transparent !important;
+    border: none !important;
+    padding: 0 20px !important;
+    
+    /* 底部下划线：hover 时 width 从 0 过渡到 100% */
+    &::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: linear-gradient(90deg, #ff6b9d, #00d4ff);
+        transition: width 0.3s ease;
+    }
+    
+    &:hover {
+        color: #ffffff !important;
+        background: transparent !important;
+        
+        &::after {
+            width: 100%;
+        }
+    }
+
+    &.is-active {
+        color: #ffffff !important;
+        background: transparent !important;
+        &::after {
+            width: 100%;
+        }
+    }
+    
+    i {
+        color: inherit !important;
+        margin-right: 5px !important;
+    }
 }
 
-.menu-wrapper .menu_view .first-item .el-sub-menu__title i{
-    margin: 0 3px 0 0;
+.menu-wrapper .menu_view .first-item {
+    background: transparent !important;
+    border: none !important;
+    
+    .el-sub-menu__title {
+        color: rgba(255, 255, 255, 0.75) !important;
+        background: transparent !important;
+        padding: 0 20px;
+        transition: var(--transition);
+        
+        &:hover {
+            color: #ffffff !important;
+        }
+        
+        i {
+            color: inherit !important;
+        }
+    }
+    
+    &.is-active .el-sub-menu__title {
+        color: #ffffff !important;
+    }
 }
-.menu-wrapper .menu_view .first-item .el-sub-menu__title:hover{
-    background: #fff; 
-    color: var(--theme);
-    border-radius: 30px;
-    border-bottom: 0px solid var(--theme);
+
+.index_top .cart {
+    color: rgba(255, 255, 255, 0.8);
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 50px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    &:hover {
+        color: var(--color-pink);
+        background: rgba(255, 107, 157, 0.1);
+        border-color: rgba(255, 107, 157, 0.3);
+        box-shadow: 0 0 12px rgba(255, 107, 157, 0.3);
+    }
 }
-.menu-wrapper .el-menu--horizontal>.el-sub-menu.is-active .el-sub-menu__title{
-    background: #fff; 
-    border-bottom: none;
-    border-bottom: 0px solid var(--theme);
-    border-radius: 30px;
+
+.index_top .user .nickname {
+    color: rgba(255, 255, 255, 0.8);
 }
-.menu-wrapper .el-menu--horizontal>.el-menu-item.is-active,.menu-wrapper .el-menu--horizontal>.el-sub-menu.is-active .el-sub-menu__title {
-    background: #fff;  
-    color: var(--theme)!important;
-    font-size: inherit;
-    border-radius: 30px;
-    border-bottom: 0px solid var(--theme);
-}
-.menu-wrapper .el-menu--horizontal .el-menu-item:not(.is-disabled):focus,.menu-wrapper  .el-menu--horizontal .el-menu-item:not(.is-disabled):hover {
-    background: var(--theme-light4);
-}
+
 
 
 
@@ -560,42 +511,82 @@ color:#FFF!important;
 i.el-icon.el-sub-menu__icon-arrow {
     display:none;
 }
-.rotation_view{
+.rotation_view {
     width: 100%;
     padding: 0;
     margin: 0px auto;
+    position: relative;
+    
+    &::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 120px;
+        pointer-events: none;
+        background: linear-gradient(transparent, #0d0d1a);
+        z-index: 10;
+    }
 }
-.rotation_view .swiper{
-    height:450px;
+
+.rotation_view .swiper {
+    height: 450px;
 }
+
 .rotation_view .swiper-slide img {
     width: 100%;
-    height:100%;
+    height: 100%;
     object-fit: cover;
-    border-radius: 0px; 
-}
-.swiper-pagination-bullet-active {
-    background: var(--theme);
+    border-radius: 0px;
 }
 
+/* 轮播图左右切换箭头 */
+.rotation_view .swiper-button-next,
+.rotation_view .swiper-button-prev {
+    width: 48px !important;
+    height: 48px !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 107, 157, 0.4) !important;
+    border-radius: 50% !important;
+    color: #fff !important;
+    margin: 0 40px !important;
+    transition: var(--transition);
+    z-index: 20;
+    
+    &::after {
+        font-size: 20px !important;
+        font-weight: 600 !important;
+        background: transparent !important;
+        width: auto !important;
+        height: auto !important;
+        line-height: normal !important;
+    }
+    
+    &:hover {
+        background: rgba(255, 255, 255, 0.2) !important;
+        box-shadow: 0 0 16px rgba(255, 107, 157, 0.5);
+        border-color: var(--color-pink) !important;
+    }
+}
 
-.rotation_view .swiper-button-prev{
-    margin-left:40px !important; 
+/* 轮播指示点 */
+::v-deep .swiper-pagination-bullet {
+    width: 8px !important;
+    height: 8px !important;
+    background: rgba(255, 255, 255, 0.3) !important;
+    opacity: 1 !important;
+    margin: 0 5px !important;
+    transition: var(--transition);
 }
-.rotation_view .swiper-button-next{
-    margin-right:40px !important; 
-}
-.rotation_view .swiper-button-next:after,.rotation_view .swiper-button-prev:after {
-    background:rgba(255,255,255,.5);
-    font-size: 20px;
-    color: #fff;
-    font-weight: 600;
-    padding: 0 20px;
-    width: 50px !important;
-    height: 50px !important;
-    line-height: 50px !important;
-    text-align: center;
-    border-radius: 100%;
+
+::v-deep .swiper-pagination-bullet-active {
+    width: 24px !important;
+    height: 8px !important;
+    border-radius: 50px !important;
+    background: linear-gradient(90deg, var(--color-pink), var(--color-blue)) !important;
 }
 
 .breadcrumb-wrapper {
@@ -833,5 +824,24 @@ width: 100%;
     border-radius: 10px 10px 10px 10px;
     font-size:18px;
  
+}
+.el-backtop {
+    right: 40px !important;
+}
+.main-containers {
+    background: transparent;
+}
+#index {
+    background: transparent;
+}
+.bottom_view {
+    width: 100%;
+    padding: 40px 7%;
+    margin: 0 auto;
+    background: rgba(0, 0, 0, 0.3);
+    color: rgba(255, 255, 255, 0.6);
+    display: flex;
+    justify-content: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 </style>
