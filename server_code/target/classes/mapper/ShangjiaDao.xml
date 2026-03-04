@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cl.dao.ShangjiaDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.cl.entity.ShangjiaEntity" id="shangjiaMap">
+        <result property="shangjiazhanghao" column="shangjiazhanghao"/>
+        <result property="shangjiamima" column="shangjiamima"/>
+        <result property="shangjiamingcheng" column="shangjiamingcheng"/>
+        <result property="touxiang" column="touxiang"/>
+        <result property="youxiang" column="youxiang"/>
+        <result property="lianxifangshi" column="lianxifangshi"/>
+        <result property="shenfenzheng" column="shenfenzheng"/>
+        <result property="yingyezizhi" column="yingyezizhi"/>
+        <result property="sfsh" column="sfsh"/>
+        <result property="shhf" column="shhf"/>
+        <result property="zhuceshijian" column="zhuceshijian"/>
+        <result property="maxPasswordWrong" column="max_password_wrong"/>
+        <result property="isLocked" column="is_locked"/>
+        <result property="longitude" column="longitude"/>
+        <result property="latitude" column="latitude"/>
+        <result property="fulladdress" column="fulladdress"/>
+    </resultMap>
+
+    <select id="selectListView"
+		resultType="com.cl.entity.view.ShangjiaView" >
+
+		SELECT  shangjia.* FROM shangjia  shangjia 	        
+        <where> 1=1 ${ew.sqlSegment}</where>
+	</select>
+	
+	<select id="selectView"
+		resultType="com.cl.entity.view.ShangjiaView" >
+		SELECT * FROM shangjia  shangjia <where> 1=1 ${ew.sqlSegment}</where>
+	</select>
+
+
+
+</mapper>

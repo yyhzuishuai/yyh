@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cl.dao.CouponDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.cl.entity.CouponEntity" id="couponMap">
+        <result property="couponName" column="coupon_name"/>
+        <result property="couponType" column="coupon_type"/>
+        <result property="fullAmount" column="full_amount"/>
+        <result property="discountAmount" column="discount_amount"/>
+        <result property="effectTime" column="effect_time"/>
+        <result property="expireTime" column="expire_time"/>
+        <result property="remark" column="remark"/>
+        <result property="userid" column="userid"/>
+        <result property="shangjiazhanghao" column="shangjiazhanghao"/>
+    </resultMap>
+
+    <select id="selectListView"
+		resultType="com.cl.entity.view.CouponView" >
+
+		SELECT  coupon.* FROM coupon  coupon 	        
+        <where> 1=1 ${ew.sqlSegment}</where>
+	</select>
+	
+	<select id="selectView"
+		resultType="com.cl.entity.view.CouponView" >
+		SELECT * FROM coupon  coupon <where> 1=1 ${ew.sqlSegment}</where>
+	</select>
+
+
+
+</mapper>

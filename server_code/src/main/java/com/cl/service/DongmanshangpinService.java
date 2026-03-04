@@ -1,0 +1,32 @@
+package com.cl.service;
+
+import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.service.IService;
+import com.cl.utils.PageUtils;
+import com.cl.entity.DongmanshangpinEntity;
+import java.util.List;
+import java.util.Map;
+import org.apache.ibatis.annotations.Param;
+import com.cl.entity.view.DongmanshangpinView;
+
+
+/**
+ * 动漫商品
+ *
+ * @author 
+ * @email 
+ * @date 2025-12-15 17:24:21
+ */
+public interface DongmanshangpinService extends IService<DongmanshangpinEntity> {
+
+    PageUtils queryPage(Map<String, Object> params);
+    
+   	List<DongmanshangpinView> selectListView(Wrapper<DongmanshangpinEntity> wrapper);
+   	
+   	DongmanshangpinView selectView(@Param("ew") Wrapper<DongmanshangpinEntity> wrapper);
+   	
+   	PageUtils queryPage(Map<String, Object> params,Wrapper<DongmanshangpinEntity> wrapper);
+   	
+   
+}
+
