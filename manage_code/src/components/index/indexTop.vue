@@ -555,12 +555,32 @@
     width: 100%;
     color: #fff;
     z-index: 9;
-    background: var(--theme);
-    height: 120px;
     height: 100px;
+    background: linear-gradient(135deg, #FF8C69, #FF7055 50%, #FFB347);
+    box-shadow: 0 2px 12px rgba(255,140,105,0.35);
 }
 
-.top_view .projectName {position: relative;padding-left: 20px;line-height: 44px;margin-right: auto;font-size: 24px;}
+.top_view::after {
+    content: '✨🌸';
+    position: absolute;
+    right: 260px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.2;
+    pointer-events: none;
+    font-size: 36px;
+}
+
+.top_view .projectName {
+    position: relative;
+    padding-left: 20px;
+    line-height: 44px;
+    margin-right: auto;
+    font-size: 24px;
+    color: #FFFFFF;
+    font-weight: 700;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.15);
+}
 
 .top_view .currentDate {
     /* margin: 0 10px; */
@@ -583,6 +603,10 @@
     align-items: center;
     gap: 6px;
     outline: none;
+    background: rgba(255,255,255,0.2);
+    border-radius: 20px;
+    padding: 4px 14px;
+    color: #FFFFFF;
 }
 
 .top_view .nickname {

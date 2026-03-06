@@ -74,7 +74,8 @@
 		}
 
 		:deep(.el-scrollbar__wrap) {
-			height: 49px;
+			min-height: 50px;
+			height: auto;
 		}
 	}
 </style>

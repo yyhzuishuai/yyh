@@ -102,7 +102,8 @@
 </script>
 
 <style>
-.menu_wrapper{
+/* 侧边栏容器 */
+.menu_wrapper {
     width: 210px;
     position: fixed;
     top: 139px;
@@ -110,131 +111,100 @@
     height: calc(100vh - 138px);
     padding: 0;
     z-index: 999;
-    border-radius: 0;
     --el-menu-item-height: 44px;
     --el-menu-sub-item-height: 44px;
-    background: #f4f6f5;
-    border: 1px solid #ccc;
+    background-color: var(--bg-page);
+    border-right: 1px solid #FFD6C0;
+    box-shadow: 2px 0 10px rgba(255,140,105,0.08);
+    transition: width 0.3s ease;
 }
+.menu_wrapper.menu_wrapper_collapse {
+    width: 64px;
+}
+
 .menu_wrapper .menu_view {
-    background-color: var(--el-menu-bg-color);
-    border-right:none;
-    box-sizing: border-box;
-    list-style: none;
-    margin: 0;
-    padding-left: 0;
-    position: relative;
+    background-color: transparent !important;
+    border-right: none;
 }
 
-/** 首页 **/
-.menu_wrapper .el-menu-item {
-    align-items: center;
-    border-bottom: 0px solid transparent;
-    color: #000;
-    font-size: 16px;
-    border-left: 4px solid #f9fafb;
+/* 统一菜单项基础样式 */
+.menu_wrapper .el-menu-item,
+.menu_wrapper .el-sub-menu__title {
+    color: var(--text-main) !important;
+    transition: all 0.2s ease;
+    border-left: 3px solid transparent !important;
 }
-.menu_wrapper .el-menu-item:hover{
-    background: var(--theme) !important; 
-    color: #fff !important; 
-    border-left: 4px solid #a3d1e8;
+
+/* 统一菜单项 Hover */
+.menu_wrapper .el-menu-item:hover,
+.menu_wrapper .el-sub-menu .el-sub-menu__title:hover {
+    background-color: var(--pink-light) !important;
+    color: #CC4400 !important;
+    border-left-color: var(--primary) !important;
 }
-.menu_wrapper .el-menu-item.is-active{
-    background: var(--theme) !important; 
-    color: #fff !important; 
-    font-size: 16px !important; 
-    border-bottom: none;
-    border-left: 4px solid #a3d1e8;
+
+/* 统一激活菜单项 */
+.menu_wrapper .el-menu-item.is-active,
+.menu_wrapper .el-sub-menu.is-active > .el-sub-menu__title {
+    background-color: var(--pink) !important;
+    color: var(--text-main) !important;
+    font-weight: 600;
+    border-left-color: var(--primary) !important;
 }
-.menu_wrapper .el-menu-item .iconfont{
-    margin-right: 10px;
-}
-/** 其他 **/
-.menu_wrapper .menu_view .first-item{
-    position: relative;
-    border-top: 5px solid #fff;
-    border-bottom: 5px solid #fff;
-    box-sizing: content-box;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    /* margin-bottom: 10px; */
-    background: #f4f6f5;
-    border-radius: 0;
-}
-.menu_wrapper .menu_view .first-item .el-sub-menu__title{
-    color: #000;
-    font-size: 16px;
-    border-left: 4px solid #f9fafb;
-}
-.menu_wrapper .menu_view .first-item .el-sub-menu__title:hover{
-    background: var(--theme);
-    color: #fff;
-    /* border-left: 4px solid #a3d1e8; */
-}
-.menu_wrapper .el-sub-menu.is-active .el-sub-menu__title{
-    background: var(--theme);
-    border-bottom: none;
-    font-size:16px;
-    border-left: none!important;
-}
-.menu_wrapper .el-menu-item.is-active,.menu_wrapper .el-sub-menu.is-active .el-sub-menu__title {
-    background: var(--theme);
-    color: #fff!important;
-    font-size: 16px;
-    /* border-radius: 6px; */
-}
-.menu_wrapper .el-menu-item:not(.is-disabled):focus,.menu_wrapper  .el-menu-item:not(.is-disabled):hover {
-    background: var(--theme-light4);
-}
-.menu_wrapper .menu_view .first-item .el-sub-menu__title .iconfont{
-    margin-right: 10px;
-}
+
+/* 覆盖 Element Plus 变量 */
 .menu_wrapper {
-    --el-menu-bg-color: none;
-    --el-menu-active-color: var(--theme-dark);
-}
-.menu_wrapper .el-menu-item .el-sub-menu__icon-more{
-    color: #fff;
+    --el-menu-bg-color: transparent;
+    --el-menu-active-color: var(--text-main);
+    --el-menu-hover-bg-color: var(--pink-light);
+    --el-menu-hover-text-color: #CC4400;
 }
 
-/** 二级盒子 **/
-.menu_wrapper .el-menu--popup {
-    border: none;
-    border-radius: var(--el-border-radius-small);
-    box-shadow: var(--el-box-shadow-light);
-    min-width: auto;
-    padding: 0px 0;
-    z-index: 100; 
+/* 子菜单弹出层 */
+.el-menu--popup {
+    background-color: #FFF0F5 !important;
 }
+
+/* 子菜单项 */
 .menu_wrapper li.el-menu-item.second-item {
-    padding-left:46px !important;
-    border-left:none;
-    /* margin-top: 10px; */
-    border-radius: 0;
-    background: #e6f0c6!important;
-    border-bottom: 1px solid #ccc;
-    color: #666;
-}
-.menu_wrapper li.el-menu-item.second-item:hover{
-    /* background: var(--theme50) !important; */
-    color: #333!important;
-}
-.menu_wrapper li.el-menu-item.second-item.is-active{
-    color: var(--theme)!important;
-}
-.menu_wrapper i.el-icon.el-sub-menu__icon-more {
-    color: #fff;
+    padding-left: 46px !important;
+    font-size: 13px;
+    color: #666666;
+    background-color: transparent !important;
 }
 
+/* 子菜单项 Hover */
+.menu_wrapper li.el-menu-item.second-item:hover {
+    background-color: var(--pink-light) !important;
+    color: #CC4400 !important;
+}
 
-.menu_wrapper .menu_view .first-item.is-active:after {content: '';position: absolute;background-image: url(http://clfile.zggen.cn/20251108/d2ac471bd27f4819b18032150ab17ba4.webp);width: 10px;height: 18px;top: 11px;background-size: 100% 100%;left: -1px;}
+/* 子菜单项激活 */
+.menu_wrapper li.el-menu-item.second-item.is-active {
+    background-color: var(--pink) !important;
+    color: var(--text-main) !important;
+    font-weight: 600;
+}
 
+/* 图标颜色继承 */
+.menu_wrapper .iconfont,
+.menu_wrapper .el-sub-menu__icon-arrow {
+    color: inherit !important;
+}
+
+/* 移除旧的边框和背景 */
+.menu_wrapper .menu_view .first-item,
 .menu_wrapper .el-sub-menu.first-item .el-sub-menu__title {
-    border: 1px solid #ccc;
-    /* border-radius: 6px; */
+    border: none !important;
+    background: transparent !important;
+}
+.menu_wrapper .menu_view .first-item {
+    border-top: none !important;
+    border-bottom: none !important;
 }
 
-.menu_wrapper li.el-sub-menu.first-item {
-    border: none;
+/* 移除旧的激活后伪元素 */
+.menu_wrapper .menu_view .first-item.is-active:after {
+    content: none !important;
 }
 </style>

@@ -234,8 +234,8 @@
 				text-align: center;
 				transition: all .3s cubic-bezier(.645, .045, .355, 1);
 				transform-origin: 100% 50%;
-				margin-right: -4px;
-				margin-left: 4px;
+				margin-right: 0;
+				margin-left: 6px;
 
 				&:before {
 					transform: scale(.6);
@@ -244,48 +244,92 @@
 				}
 
 				&:hover {
-					background-color: #b4bccc;
-					color: #fff;
+					background-color: transparent;
+					color: #FF4444;
 				}
 			}
 		}
 	}
 </style>
 <style>
+/* Tab 容器 */
 #tags-view-container {
-    display: block;
-    padding: 10px;
-    background: var(--theme);
-    border-radius: 10px;
-    margin-top: 30px;
-    margin-left: 20px;
+    background-color: #FFFFFF;
+    border-bottom: 2px solid #FFE4EC;
+    padding: 6px 12px 0;
+    margin: 0;
+    border-radius: 0;
 }
 
 #tags-view-container .el-scrollbar__view {
     display: flex;
-}
-
-#tags-view-container .tags-view-item {
-    background: var(    --theme);
-    margin-right: 10px;
-    padding: 4px 10px;
-    color: #fff;
-    border-radius: 4px;
-    display: flex;
     align-items: center;
-    gap: 6px;
-    line-height: 14px;
+    padding: 4px 0;
 }
 
+/* 单个 Tab */
+#tags-view-container .tags-view-item {
+    background-color: #FFFFFF;
+    color: #888888;
+    border: 1px solid #FFD6C0;
+    border-bottom: none;
+    border-radius: 8px 8px 0 0;
+    margin-right: 4px;
+    padding: 6px 14px;
+    display: inline-flex;
+    align-items: center;
+    box-sizing: border-box;
+    white-space: nowrap;
+    flex-shrink: 0;
+    gap: 0;
+    font-size: 14px;
+    line-height: 22px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    height: auto;
+    min-height: 42px;
+}
+
+/* Tab Hover */
+#tags-view-container .tags-view-item:hover {
+    background-color: #FFF0E8;
+    color: #CC4400;
+}
+
+/* 激活的 Tab */
 #tags-view-container .active.tags-view-item {
-    background: #fff;
-    color: var(--theme);
-    border: 3px solid var(    --theme);
+    background-color: #FF8C69;
+    color: #FFFFFF;
+    border-color: #FF8C69;
+    font-weight: 600;
 }
 
+/* 移除激活 Tab 的小圆点 */
 #tags-view-container .tags-view-wrapper .tags-view-item.active:before {
-    background: var(--theme);
+    content: none;
 }
+
+/* 关闭按钮 */
+.tags-view-item .el-icon-close {
+    opacity: 0.6;
+    font-size: 12px;
+    margin-left: 6px;
+    transition: all 0.2s ease;
+    border-radius: 50%;
+    padding: 2px;
+    flex: 0 0 auto;
+}
+
+.tags-view-item .el-icon-close:hover {
+    opacity: 1;
+    color: #FF4444 !important;
+}
+
+/* 激活 Tab 上的关闭按钮 */
+.active.tags-view-item .el-icon-close {
+    color: #FFFFFF;
+}
+
 #tags-view-container .el-scrollbar__wrap {
     height: auto!important;
 }
